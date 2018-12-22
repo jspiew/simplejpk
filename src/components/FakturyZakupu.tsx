@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IFakturaZakupu } from  "../models/jpk"
-import {  DefaultButton, DetailsList, IColumn } from "office-ui-fabric-react"
+import {  DefaultButton, DetailsList, IColumn, TextField, DatePicker } from "office-ui-fabric-react"
 import {observer} from "mobx-react"
 
 export interface  IFakturyZakupuProps {
@@ -27,48 +27,72 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
             key: "nrDostawcy",
             name: "Numer dostawcy",
             minWidth: 100,
-            onRender: (item:IFakturaZakupu) => {
-                return <span>{item.nrDostawcy}</span>
+            onRender: (item:IFakturaZakupu, index) => {
+                const update = (v:string) => {
+                    item.nrDostawcy = v;
+                    this.props.updateBuyInvoice(index || 0, item);
+                }
+                return <TextField value={item.nrDostawcy} onChanged= {update}/>
             }
         },
         {
             key: "nazwaDostawcy",
             name: "Nazwa Dostawcy",
             minWidth: 100,
-            onRender: (item: IFakturaZakupu) => {
-                return <span>{item.nazwaDostawcy}</span>
+            onRender: (item: IFakturaZakupu, index) => {
+                const update = (v: string) => {
+                    item.nazwaDostawcy = v;
+                    this.props.updateBuyInvoice(index || 0, item);
+                }
+                return <TextField value={item.nazwaDostawcy} onChanged={update} />
             }
         },
         {
             key: "adresDostawct",
             name: "Adres Dostawcy",
             minWidth: 100,
-            onRender: (item: IFakturaZakupu) => {
-                return <span>{item.adresDostawcy}</span>
+            onRender: (item: IFakturaZakupu, index) => {
+                const update = (v: string) => {
+                    item.adresDostawcy = v;
+                    this.props.updateBuyInvoice(index || 0, item);
+                }
+                return <TextField value={item.adresDostawcy} multiline={true} onChanged={update} />
             }
         },
         {
             key: "dowodZakupu",
             name: "Dowód Zakupu",
             minWidth: 100,
-            onRender: (item: IFakturaZakupu) => {
-                return <span>{item.dowodZakupu}</span>
+            onRender: (item: IFakturaZakupu, index) => {
+                const update = (v: string) => {
+                    item.dowodZakupu = v;
+                    this.props.updateBuyInvoice(index || 0, item);
+                }
+                return <TextField value={item.dowodZakupu} onChanged={update} />
             }
         },
         {
             key: "dataZakupu",
             name: "Data Zakupu",
             minWidth: 100,
-            onRender: (item: IFakturaZakupu) => {
-                return <span>{item.dataZakupu.toDateString()}</span>
+            onRender: (item: IFakturaZakupu, index) => {
+                const update = (v: Date) => {
+                    item.dataZakupu = v;
+                    this.props.updateBuyInvoice(index || 0, item);
+                }
+                return <DatePicker value={item.dataZakupu} onSelectDate={update} />
             }
         },
         {
             key: "dataWplywu",
             name: "Data Wpływu",
             minWidth: 100,
-            onRender: (item: IFakturaZakupu) => {
-                return <span>{item.dataWplywu.toDateString()}</span>
+            onRender: (item: IFakturaZakupu, index) => {
+                const update = (v: Date) => {
+                    item.dataWplywu = v;
+                    this.props.updateBuyInvoice(index || 0, item);
+                }
+                return <DatePicker value={item.dataWplywu} onSelectDate={update} />
             }
         },
         {
