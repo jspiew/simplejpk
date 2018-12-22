@@ -1,0 +1,1 @@
+export const DATEFORMAT = "dd-mm-yyyy";

@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@types/dateformat": "^1.0.1",
+    "dateformat": "^3.0.3",
     "mobx": "^5.8.0",
     "mobx-react": "^5.4.3",
     "office-ui-fabric-react": "^6.117.1",

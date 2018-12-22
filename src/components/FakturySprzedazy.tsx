@@ -99,8 +99,12 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
             key: "k19",
             name: "K19",
             minWidth: 100,
-            onRender: (item: IFakturaSprzedazy) => {
-                return <span>{item.k19}</span>
+            onRender: (item: IFakturaSprzedazy, index) => {
+                const update = (v: string) => {
+                    item.k19 = Number(v);
+                    this.props.updateSellInvoice(index || 0, item);
+                }
+                return <TextField value={item.k19.toString()} onChanged={update} />
             }
         },
         {
@@ -128,7 +132,6 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
             
         );
     }
-
 
 }
 
