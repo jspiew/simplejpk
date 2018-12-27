@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { TextField, ITextFieldProps, DatePicker } from "office-ui-fabric-react"
+import { TextField, ITextFieldProps, DatePicker, autobind } from "office-ui-fabric-react"
 import {_formatDate} from "../utils/utils"
 import { IJPK } from 'src/models/jpk';
 
@@ -7,6 +7,7 @@ import { IJPK } from 'src/models/jpk';
 
 export interface IJpkNaglowekProps {
     jpk: IJPK
+    updateJpk: (jpk: IJPK) => void
 }
 
 export class JpkNaglowek extends React.Component<IJpkNaglowekProps,{}> {
@@ -38,6 +39,11 @@ export class JpkNaglowek extends React.Component<IJpkNaglowekProps,{}> {
                 </div>
             </div>
         );
+    }
+
+    @autobind
+    private updateDateFrom(date: Date){
+        
     }
 }
 
