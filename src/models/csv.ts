@@ -55,6 +55,7 @@ export interface IJpkCsvRow {
     NazwaDostawcy: string | null,
     AdresDostawcy: string | null,
     DowodZakupu: string | null,
+    DataZakupu: string | null,
     DataWplywu: string | null,
     K_43: string | null,
     K_44: string | null,

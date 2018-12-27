@@ -1,6 +1,7 @@
 import { IJPK } from './models/jpk';
 import { IJpkCsvRow } from './models/csv';
 import * as df from "dateformat"
+import * as numeral from "numeral"
 
 function formatDate(date:Date, includeTime: boolean){
     if(includeTime){
@@ -25,9 +26,45 @@ function getSellRows(jpk: IJPK){
     jpk.sprzedaz.forEach((invoice,index) => {
         const invRow = getEmptyRow();
         invRow.LpSprzedazy = (index+1).toString();
-        invRow.NrKontrahenta = invoice.nrKontrahenta === null || invoice.nrKontrahenta === undefined || invRow.NrKontrahenta === "" ? "brak" : invoice.nrKontrahenta,
-        invRow.NazwaKontrahenta = invoice.nazwaKontrahenta
+        invRow.NrKontrahenta = invoice.nrKontrahenta === null || invoice.nrKontrahenta === undefined || invoice.nrKontrahenta === "" ? "brak" : invoice.nrKontrahenta;
+        invRow.NazwaKontrahenta = invoice.nazwaKontrahenta;
+        invRow.AdresKontrahenta = invoice.adresKontrahenta;
+        invRow.DowodSprzedazy = invoice.dowodSprzedazy;
+        invRow.DataWystawienia = formatDate(invoice.dataWystawienia,false);
+        invRow.DataSprzedazy = formatDate(invoice.dataSprzedazy, false);
+        invRow.K_19 = numeral(invoice.k19).format("0,00");
+        invRow.K_20 = numeral(invoice.k20).format("0,00");      
+        rows.push(invRow);
     })
+    
+    const sellSummaryRow = getEmptyRow();
+    sellSummaryRow.PodatekNalezny = numeral(0).format("0,00");
+    sellSummaryRow.LiczbaWierszySprzedazy = rows.length.toString();
+    
+    return [...rows,sellSummaryRow];
+}
+
+function getBuyRows(jpk: IJPK) {
+    let rows: IJpkCsvRow[] = [];
+    jpk.zakup.forEach((invoice, index) => {
+        const invRow = getEmptyRow();
+        invRow.LpZakupu = (index + 1).toString();
+        invRow.NrDostawcy = invoice.nrDostawcy === null || invoice.nrDostawcy === undefined || invoice.nrDostawcy === "" ? "brak" : invoice.nrDostawcy;
+        invRow.NazwaDostawcy = invoice.nazwaDostawcy;
+        invRow.AdresDostawcy = invoice.adresDostawcy;
+        invRow.DowodZakupu = invoice.dowodZakupu;
+        invRow.DataZakupu = formatDate(invoice.dataZakupu,false);
+        invRow.DataWplywu = formatDate(invoice.dataWplywu,false);
+        invRow.K_45 = numeral(invoice.k45).format("0,00");
+        invRow.K_46 = numeral(invoice.k46).format("0,00");
+        rows.push(invRow);
+    })
+
+    const sellSummaryRow = getEmptyRow();
+    sellSummaryRow.PodatekNalezny = numeral(0).format("0,00");
+    sellSummaryRow.LiczbaWierszySprzedazy = rows.length.toString();
+
+    return [...rows, sellSummaryRow];
 }
 
 function getHeaderRows(jpk: IJPK){
@@ -114,6 +151,7 @@ function getEmptyRow(){
         NazwaDostawcy: null,
         AdresDostawcy: null,
         DowodZakupu: null,
+        DataZakupu: null,
         DataWplywu: null,
         K_43: null,
         K_44: null,
