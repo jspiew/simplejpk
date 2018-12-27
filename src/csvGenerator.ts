@@ -16,13 +16,17 @@ export function downloadCSV(jpk: IJPK){
     let csvContent = "data:text/csv;charset=utf-8,";
     
     const header = getHeaderRows(jpk);
+    const sell = getSellRows(jpk);
+    const buy = getBuyRows(jpk);
+
+    const jpkContent = [...header,...sell,...buy]
 
     const encodedUri = encodeURI(csvContent);
     window.open(encodedUri);
 }
 
 function getSellRows(jpk: IJPK){
-    let rows: IJpkCsvRow[]  = [];
+    const rows: IJpkCsvRow[]  = [];
     jpk.sprzedaz.forEach((invoice,index) => {
         const invRow = getEmptyRow();
         invRow.LpSprzedazy = (index+1).toString();
@@ -45,7 +49,7 @@ function getSellRows(jpk: IJPK){
 }
 
 function getBuyRows(jpk: IJPK) {
-    let rows: IJpkCsvRow[] = [];
+    const rows: IJpkCsvRow[] = [];
     jpk.zakup.forEach((invoice, index) => {
         const invRow = getEmptyRow();
         invRow.LpZakupu = (index + 1).toString();
@@ -60,11 +64,11 @@ function getBuyRows(jpk: IJPK) {
         rows.push(invRow);
     })
 
-    const sellSummaryRow = getEmptyRow();
-    sellSummaryRow.PodatekNalezny = numeral(0).format("0,00");
-    sellSummaryRow.LiczbaWierszySprzedazy = rows.length.toString();
+    const buySummaryRow = getEmptyRow();
+    buySummaryRow.PodatekNaliczony = numeral(0).format("0,00");
+    buySummaryRow.LiczbaWierszyZakupow = rows.length.toString();
 
-    return [...rows, sellSummaryRow];
+    return [...rows, buySummaryRow];
 }
 
 function getHeaderRows(jpk: IJPK){
@@ -88,9 +92,6 @@ function getHeaderRows(jpk: IJPK){
     const delimitterRow = getEmptyRow();
 
     return [headerRow,submitterRow,delimitterRow]
-}
-
-    return headerRow;
 }
 
 function getEmptyRow(){
