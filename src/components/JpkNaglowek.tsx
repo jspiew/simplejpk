@@ -1,12 +1,17 @@
 import * as React from 'react';
 import { TextField, ITextFieldProps, DatePicker } from "office-ui-fabric-react"
+import {_formatDate} from "../utils/utils"
+import { IJPK } from 'src/models/jpk';
 
 
 
+export interface IJpkNaglowekProps {
+    jpk: IJPK
+}
 
-export class JpkNaglowek extends React.Component {
+export class JpkNaglowek extends React.Component<IJpkNaglowekProps,{}> {
 
-    constructor(props: ITextFieldProps) {
+    constructor(props: IJpkNaglowekProps) {
         super(props);        
     }
 
@@ -16,82 +21,19 @@ export class JpkNaglowek extends React.Component {
             <div className="ms-Grid">
                 <div className="ms-Grid-row">
                     <div className="ms-Grid-col ms-sm6 ms-md2">
-                        <h3>Cel złożenia</h3>
+                        <DatePicker label="Data od" formatDate={_formatDate} value={this.props.jpk.dataOd} placeholder="Pierwszy dzien miesiaca" />
                     </div>
                     <div className="ms-Grid-col ms-sm6 ms-md2">
-                        <TextField />
-                    </div>
-                </div>
-                <div className="ms-Grid-row">
-                    <div className="ms-Grid-col ms-sm6 ms-md2">
-                        <h3>Data od</h3>
+                        <DatePicker label="Data do" formatDate={_formatDate} value={this.props.jpk.dataDo} placeholder="Ostatni dzien miesiaca"/>
                     </div>
                     <div className="ms-Grid-col ms-sm6 ms-md2">
-                        <DatePicker />
-                    </div>
-                </div>
-                <div className="ms-Grid-row">
-                    <div className="ms-Grid-col ms-sm6 ms-md2">
-                        <h3>Data do</h3>
+                        <TextField label="Email" value={this.props.jpk.email}/>
                     </div>
                     <div className="ms-Grid-col ms-sm6 ms-md2">
-                        <DatePicker />
-                    </div>
-                </div>
-                <div className="ms-Grid-row">
-                    <div className="ms-Grid-col ms-sm6 ms-md2">
-                        <h3>Data wytworzenia</h3>
+                        <TextField label="NIP" value={this.props.jpk.nip}/>
                     </div>
                     <div className="ms-Grid-col ms-sm6 ms-md2">
-                        <TextField disabled={true}/>
-                    </div>
-                </div>
-                <div className="ms-Grid-row">
-                    <div className="ms-Grid-col ms-sm6 ms-md2">
-                        <h3>Email</h3>
-                    </div>
-                    <div className="ms-Grid-col ms-sm6 ms-md2">
-                        <TextField />
-                    </div>
-                </div>
-                <div className="ms-Grid-row">
-                    <div className="ms-Grid-col ms-sm6 ms-md2">
-                        <h3>Kod formularza</h3>
-                    </div>
-                    <div className="ms-Grid-col ms-sm6 ms-md2">
-                        <TextField />
-                    </div>
-                </div>
-                <div className="ms-Grid-row">
-                    <div className="ms-Grid-col ms-sm6 ms-md2">
-                        <h3>Kod systemowy</h3>
-                    </div>
-                    <div className="ms-Grid-col ms-sm6 ms-md2">
-                        <TextField />
-                    </div>
-                </div>
-                <div className="ms-Grid-row">
-                    <div className="ms-Grid-col ms-sm6 ms-md2">
-                        <h3>Nazwa systemu</h3>
-                    </div>
-                    <div className="ms-Grid-col ms-sm6 ms-md2">
-                        <TextField />
-                    </div>
-                </div>
-                <div className="ms-Grid-row">
-                    <div className="ms-Grid-col ms-sm6 ms-md2">
-                        <h3>NIP</h3>
-                    </div>
-                    <div className="ms-Grid-col ms-sm6 ms-md2">
-                        <TextField />
-                    </div>
-                </div>
-                <div className="ms-Grid-row">
-                    <div className="ms-Grid-col ms-sm6 ms-md2">
-                        <h3>Pelna nazwa</h3>
-                    </div>
-                    <div className="ms-Grid-col ms-sm6 ms-md2">
-                        <TextField />
+                        <TextField label="Pełna nazwa" placeholder="Nazwa firmy..." value={this.props.jpk.pelnaNazwa}/>
                     </div>
                 </div>
             </div>

@@ -3,6 +3,8 @@ import { IJpkCsvRow } from './models/csv';
 import * as df from "dateformat"
 import * as numeral from "numeral"
 
+
+
 function formatDate(date:Date, includeTime: boolean){
     if(includeTime){
         return df(date, "yyyy-mm-ddThh:MM:ss")
@@ -20,9 +22,18 @@ export function downloadCSV(jpk: IJPK){
     const buy = getBuyRows(jpk);
 
     const jpkContent = [...header,...sell,...buy]
+    
+    csvContent+=getHeaderRow();
+    jpkContent.forEach(row => {
+        csvContent+=csvRow(row);
+    })
 
-    const encodedUri = encodeURI(csvContent);
-    window.open(encodedUri);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodeURI(csvContent));
+    link.setAttribute('download',`JPK.csv`);
+    link.click();
+    
+    
 }
 
 function getSellRows(jpk: IJPK){
@@ -167,4 +178,25 @@ function getEmptyRow(){
     }
 
     return emptyRow;
+}
+
+function csvRow(rowData: IJpkCsvRow){
+    return `${csvVal(rowData.KodFormularza)};${csvVal(rowData.kodSystemowy)};${csvVal(rowData.wersjaSchemy)};${csvVal(rowData.WariantFormularza)};${csvVal(rowData.CelZlozenia)};${csvVal(rowData.DataWytworzeniaJPK)};${csvVal(rowData.DataOd)};${csvVal(rowData.DataDo)};${csvVal(rowData.NazwaSystemu)};${csvVal(rowData.NIP)};${csvVal(rowData.PelnaNazwa)};${csvVal(rowData.Email)};${csvVal(rowData.LpSprzedazy)};${csvVal(rowData.NrKontrahenta)};${csvVal(rowData.NazwaKontrahenta)};${csvVal(rowData.AdresKontrahenta)};${csvVal(rowData.DowodSprzedazy)};${csvVal(rowData.DataWystawienia)};${csvVal(rowData.DataSprzedazy)};${csvVal(rowData.K_10)};${csvVal(rowData.K_11)};${csvVal(rowData.K_12)};${csvVal(rowData.K_13)};${csvVal(rowData.K_14)};${csvVal(rowData.K_15)};${csvVal(rowData.K_16)};${csvVal(rowData.K_17)};${csvVal(rowData.K_18)};${csvVal(rowData.K_19)};${csvVal(rowData.K_20)};${csvVal(rowData.K_21)};${csvVal(rowData.K_22)};${csvVal(rowData.K_23)};${csvVal(rowData.K_24)};${csvVal(rowData.K_25)};${csvVal(rowData.K_26)};${csvVal(rowData.K_27)};${csvVal(rowData.K_28)};${csvVal(rowData.K_29)};${csvVal(rowData.K_30)};${csvVal(rowData.K_31)};${csvVal(rowData.K_32)};${csvVal(rowData.K_33)};${csvVal(rowData.K_34)};${csvVal(rowData.K_35)};${csvVal(rowData.K_36)};${csvVal(rowData.K_37)};${csvVal(rowData.K_38)};${csvVal(rowData.K_39)};${csvVal(rowData.LiczbaWierszySprzedazy)};${csvVal(rowData.PodatekNalezny)};${csvVal(rowData.LpZakupu)};${csvVal(rowData.NrDostawcy)};${csvVal(rowData.NazwaDostawcy)};${csvVal(rowData.AdresDostawcy)};${csvVal(rowData.DowodZakupu)};${csvVal(rowData.DataZakupu)};${csvVal(rowData.DataWplywu)};${csvVal(rowData.K_43)};${csvVal(rowData.K_44)};${csvVal(rowData.K_45)};${csvVal(rowData.K_46)};${csvVal(rowData.K_47)};${csvVal(rowData.K_48)};${csvVal(rowData.K_49)};${csvVal(rowData.K_50)};${csvVal(rowData.LiczbaWierszyZakupow)};${csvVal(rowData.PodatekNaliczony)}\n`
+}
+
+function getHeaderRow(){
+    return "KodFormularza;kodSystemowy;wersjaSchemy;WariantFormularza;CelZlozenia;DataWytworzeniaJPK;DataOd;DataDo;NazwaSystemu;NIP;PelnaNazwa;Email;LpSprzedazy;NrKontrahenta;NazwaKontrahenta;AdresKontrahenta;DowodSprzedazy;DataWystawienia;DataSprzedazy;K_10;K_11;K_12;K_13;K_14;K_15;K_16;K_17;K_18;K_19;K_20;K_21;K_22;K_23;K_24;K_25;K_26;K_27;K_28;K_29;K_30;K_31;K_32;K_33;K_34;K_35;K_36;K_37;K_38;K_39;LiczbaWierszySprzedazy;PodatekNalezny;LpZakupu;NrDostawcy;NazwaDostawcy;AdresDostawcy;DowodZakupu;DataZakupu;DataWplywu;K_43;K_44;K_45;K_46;K_47;K_48;K_49;K_50;LiczbaWierszyZakupow;PodatekNaliczony\n"
+}
+
+function csvVal(val:string | null){
+    let ret = "";
+    if (val === undefined || val === null){
+        ret = "";
+    } else if((val || "").indexOf('"') >= 0){
+        ret = `"${val}"`
+    } else {
+        ret = val as string
+    }
+
+    return ret;
 }

@@ -6,6 +6,7 @@
     "@types/dateformat": "^1.0.1",
     "@types/numeral": "0.0.25",
     "dateformat": "^3.0.3",
+    "json-csv": "^2.0.2",
     "mobx": "^5.8.0",
     "mobx-react": "^5.4.3",
     "numeral": "^2.0.6",
