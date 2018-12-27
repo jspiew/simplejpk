@@ -4,12 +4,17 @@ import { IJPK, IFakturaZakupu, IFakturaSprzedazy } from './models/jpk';
 import { FakturyZakupu } from './components/FakturyZakupu';
 import { autobind } from 'office-ui-fabric-react/lib/Utilities';
 import { FakturySprzedazy } from './components/FakturySprzedazy';
+import { initializeIcons } from '@uifabric/icons';
+import { JpkNaglowek } from './components/JpkNaglowek';
+import { downloadCSV } from './csvGenerator';
 
 
 class App extends React.Component<{},{jpk:IJPK}> {
 
   constructor(props: {}) {
       super(props);
+
+      initializeIcons();
       this.state = {
         jpk: {
           celZlozenia: "",
@@ -46,7 +51,7 @@ class App extends React.Component<{},{jpk:IJPK}> {
           <h1 className="App-title">Welcome to React</h1>
           <link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/9.6.1/css/fabric.min.css"/>
         </header>
-        <p className="App-intro">
+          <JpkNaglowek />
           <FakturyZakupu 
             fakturyZakupu={this.state.jpk.zakup}
             addBuyInvoice={this._addBuyInvoice}
@@ -60,19 +65,22 @@ class App extends React.Component<{},{jpk:IJPK}> {
             removeSellInvoice={this._removeSellInvoice}
             updateSellInvoice={this._updateSellInvoice}
           />
-               
-        </p>
-
-        <code>
+        <a onClick={this._getCSV}>CSV</a>
+        {window.location.search.indexOf("dbg") >= 0 && <code>
           <pre>
             {JSON.stringify(this.state.jpk,null,4)}
           </pre>
         </code>
+        }
       </div>
     );
   }
 
 
+  @autobind 
+  private _getCSV(){
+    downloadCSV(this.state.jpk.zakup)
+  }
 
   @autobind
   private _addBuyInvoice() {

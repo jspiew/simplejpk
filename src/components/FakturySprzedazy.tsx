@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { IFakturaSprzedazy } from  "../models/jpk"
-import {  DefaultButton, DetailsList, IColumn, TextField, DatePicker } from "office-ui-fabric-react"
+import { Icon, DefaultButton, DetailsList, IColumn, TextField, DatePicker, IconType, SelectionMode } from "office-ui-fabric-react"
 import {observer} from "mobx-react"
+import { CurrencyField } from './CurrencyFields';
+import "./faktury.css"
 
 export interface  IFakturySprzedazyProps {
     fakturyZakupu: IFakturaSprzedazy[],
@@ -100,11 +102,14 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
             name: "K19",
             minWidth: 100,
             onRender: (item: IFakturaSprzedazy, index) => {
-                const update = (v: string) => {
-                    item.k19 = Number(v);
-                    this.props.updateSellInvoice(index || 0, item);
+                const update = (event: React.FormEvent, v: string | undefined) => {
+                    const numValue = numeral(v).value();
+                    if (!isNaN(numValue) && item.k19 !== numValue) {
+                        item.k19 = numValue;
+                        this.props.updateSellInvoice(index || 0, item);
+                    }
                 }
-                return <TextField value={item.k19.toString()} onChanged={update} />
+                return <CurrencyField value={item.k19.toString()} onChange={update} />
             }
         },
         {
@@ -112,11 +117,22 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
             name: "K20",
             minWidth: 100,
             onRender: (item: IFakturaSprzedazy,index) => {
-                // const update = (v: string) => {                 
-                //     item.k20 = parseFloat(v);
-                //     this.props.updateSellInvoice(index || 0, item);
-                // }
-                return <input type="number" min="0" step="0.01" />
+                const update = (event: React.FormEvent, v: string | undefined) => {
+                    const numValue = numeral(v).value();
+                    if (!isNaN(numValue) && item.k20 !== numValue) {
+                        item.k20 = numValue;
+                        this.props.updateSellInvoice(index || 0, item);
+                    }
+                }
+                return <CurrencyField value={item.k19.toString()} onChange={update} />
+            }
+        },
+        {
+            key: "delete",
+            name: "Usun",
+            minWidth: 30,
+            onRender: (item: IFakturaSprzedazy, index) => {
+                return <Icon className="deleteIcon" iconType={IconType.default} iconName="Delete" />
             }
         }
     ]
@@ -124,9 +140,9 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
     public render() {
         return (
             <div>
-
-                <DetailsList items = {this.props.fakturyZakupu} columns = {this.columns}/>
-                <DefaultButton text="Dodaj" onClick={this.props.addSellInvoice} />
+                <h2>Faktury sprzedaży</h2>
+                <DetailsList items = {this.props.fakturyZakupu} selectionMode={SelectionMode.none} columns = {this.columns}/>
+                <DefaultButton iconProps={{ iconName: 'Add', iconType: IconType.default }} text="Dodaj" onClick={this.props.addSellInvoice} />
 
             </div>
             

@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { IFakturaZakupu } from  "../models/jpk"
-import {  DefaultButton, DetailsList, IColumn, TextField, DatePicker } from "office-ui-fabric-react"
+import { ActionButton, DetailsList, IColumn, TextField, DatePicker, IconType, Icon, SelectionMode } from "office-ui-fabric-react"
 import {observer} from "mobx-react"
 import {DATEFORMAT} from "../utils/utils"
+import * as numeral from "numeral"
 import * as df from "dateformat"
 import {CurrencyField} from "../components/CurrencyFields"
+import "./faktury.css"
 
 export interface  IFakturyZakupuProps {
     fakturyZakupu: IFakturaZakupu[],
@@ -105,9 +107,9 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
             minWidth: 150,
             onRender: (item: IFakturaZakupu, index) => {
                 const update = (event: React.FormEvent, v: string | undefined) => {
-                    const numValue = Number(v)
+                    const numValue = numeral(v).value();
                     if (!isNaN(numValue) && item.k45 !== numValue){
-                        item.k45 = Number(v);
+                        item.k45 = numValue;
                         this.props.updateBuyInvoice(index || 0, item);
                     }
                 }
@@ -120,13 +122,21 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
             minWidth: 150,
             onRender: (item: IFakturaZakupu, index) => {
                 const update = (event: React.FormEvent, v: string | undefined) => {
-                    const numValue = Number(v)
+                    const numValue = numeral(v).value();
                     if (!isNaN(numValue) && item.k46 !== numValue) {
-                        item.k46 = Number(v);
+                        item.k46 = numValue;
                         this.props.updateBuyInvoice(index || 0, item);
                     }
                 }
                 return <CurrencyField value={item.k46.toString()} onChange={update} />
+            }
+        },
+        {
+            key: "delete",
+            name: "Usun",
+            minWidth: 30,
+            onRender: (item: IFakturaZakupu, index) => {
+                return <Icon className="deleteIcon" iconType={IconType.default} iconName="Delete" />
             }
         }
     ]
@@ -134,9 +144,9 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
     public render() {
         return (
             <div>
-
-                <DetailsList items = {this.props.fakturyZakupu} columns = {this.columns}/>
-                <DefaultButton text="Dodaj" onClick={this.props.addBuyInvoice} />
+                <h2>Faktury zakupu</h2>
+                <DetailsList items={this.props.fakturyZakupu} selectionMode={SelectionMode.none} columns = {this.columns}/>
+                <ActionButton iconProps={{ iconName: 'Add', iconType: IconType.default }} text="Dodaj" onClick={this.props.addBuyInvoice} />
 
             </div>
             
