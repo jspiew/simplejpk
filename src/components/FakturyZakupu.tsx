@@ -7,6 +7,7 @@ import * as numeral from "numeral"
 import * as df from "dateformat"
 import {CurrencyField} from "../components/CurrencyFields"
 import "./faktury.css"
+import * as moment from "moment"
 
 export interface  IFakturyZakupuProps {
     fakturyZakupu: IFakturaZakupu[],
@@ -83,10 +84,10 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
             minWidth: 150,
             onRender: (item: IFakturaZakupu, index) => {
                 const update = (v: Date) => {
-                    item.dataZakupu = v;
+                    item.dataZakupu = moment(v);
                     this.props.updateBuyInvoice(index || 0, item);
                 }
-                return <DatePicker value={item.dataZakupu} formatDate={this._formatDate} onSelectDate={update} />
+                return <DatePicker value={item.dataZakupu.toDate()} formatDate={this._formatDate} onSelectDate={update} />
             }
         },
         {
@@ -95,10 +96,10 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
             minWidth: 150,
             onRender: (item: IFakturaZakupu, index) => {
                 const update = (v: Date) => {
-                    item.dataWplywu = v;
+                    item.dataWplywu = moment(v);
                     this.props.updateBuyInvoice(index || 0, item);
                 }
-                return <DatePicker value={item.dataWplywu} formatDate={this._formatDate} onSelectDate={update} />
+                return <DatePicker value={item.dataWplywu.toDate()} formatDate={this._formatDate} onSelectDate={update} />
             }
         },
         {

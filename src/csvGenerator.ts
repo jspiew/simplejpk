@@ -1,16 +1,18 @@
 import { IJPK } from './models/jpk';
 import { IJpkCsvRow } from './models/csv';
-import * as df from "dateformat"
 import * as numeral from "numeral"
+import { Moment } from 'moment';
 
 
 
-function formatDate(date:Date, includeTime: boolean){
-    if(includeTime){
-        return df(date, "yyyy-mm-ddThh:MM:ss")
+function formatDate(moment: Moment, includeTime: boolean){
+    if (moment === null || moment === undefined){
+        return null;
+    } else if(includeTime){
+        return moment.format("yyyy-mm-ddThh:MM:ss");
     }
     else {
-        return df(date, "yyyy-mm-dd")
+        return moment.format("yyyy-mm-dd");
     }
 }
 

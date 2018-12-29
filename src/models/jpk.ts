@@ -1,3 +1,4 @@
+import { Moment } from 'moment';
 
 
 export interface IJPK {
@@ -5,9 +6,9 @@ export interface IJPK {
     kodSystemowy: string,
     kodFormularza: string,
     celZlozenia: string,
-    dataWytworzeniaJPK: Date,
-    dataOd: Date,
-    dataDo: Date,
+    dataWytworzeniaJPK: Moment,
+    dataOd: Moment,
+    dataDo: Moment,
     nazwaSystemu: "Excel",
     nip: string,
     pelnaNazwa: string,
@@ -21,8 +22,8 @@ export interface IFakturaSprzedazy {
     nazwaKontrahenta: string,
     adresKontrahenta: string,
     dowodSprzedazy: string,
-    dataWystawienia: Date,
-    dataSprzedazy: Date,
+    dataWystawienia: Moment,
+    dataSprzedazy: Moment,
     k19: number,
     k20: number
 }
@@ -32,8 +33,8 @@ export interface IFakturaZakupu {
     nazwaDostawcy: string,
     adresDostawcy: string,
     dowodZakupu: string,
-    dataZakupu: Date,
-    dataWplywu: Date
+    dataZakupu: Moment,
+    dataWplywu: Moment
     k45: number
     k46: number
 }

@@ -4,6 +4,8 @@ import { Icon, DefaultButton, DetailsList, IColumn, TextField, DatePicker, IconT
 import {observer} from "mobx-react"
 import { CurrencyField } from './CurrencyFields';
 import "./faktury.css"
+import * as numeral from "numeral"
+import * as moment from 'moment'
 
 export interface  IFakturySprzedazyProps {
     fakturyZakupu: IFakturaSprzedazy[],
@@ -79,10 +81,10 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
             minWidth: 100,
             onRender: (item: IFakturaSprzedazy, index) => {
                 const update = (v: Date) => {
-                    item.dataWystawienia = v;
+                    item.dataWystawienia = moment(v);
                     this.props.updateSellInvoice(index || 0, item);
                 }
-                return <DatePicker value={item.dataWystawienia} onSelectDate={update} />
+                return <DatePicker value={item.dataWystawienia.toDate()} onSelectDate={update} />
             }
         },
         {
@@ -91,10 +93,10 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
             minWidth: 100,
             onRender: (item: IFakturaSprzedazy, index) => {
                 const update = (v: Date) => {
-                    item.dataSprzedazy = v;
+                    item.dataSprzedazy = moment(v);
                     this.props.updateSellInvoice(index || 0, item);
                 }
-                return <DatePicker value={item.dataSprzedazy} onSelectDate={update} />
+                return <DatePicker value={item.dataSprzedazy.toDate()} onSelectDate={update} />
             }
         },
         {

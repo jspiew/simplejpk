@@ -7,6 +7,7 @@ import { FakturySprzedazy } from './components/FakturySprzedazy';
 import { initializeIcons } from '@uifabric/icons';
 import { JpkNaglowek } from './components/JpkNaglowek';
 import { downloadCSV } from './csvGenerator';
+import * as moment from "moment"
 
 
 class App extends React.Component<{},{jpk:IJPK}> {
@@ -18,17 +19,29 @@ class App extends React.Component<{},{jpk:IJPK}> {
 
       const lastJPKstring = window.localStorage.getItem("lastJPK")
 
-      if(lastJPKstring){
+      if(lastJPKstring && window.location.search.indexOf("dbg") < 0){
+        const loadedJPK = JSON.parse(lastJPKstring) as IJPK;
+        loadedJPK.dataDo = moment(loadedJPK.dataDo);
+        loadedJPK.dataOd = moment(loadedJPK.dataOd);
+        loadedJPK.dataWytworzeniaJPK = moment(loadedJPK.dataWytworzeniaJPK);
+        loadedJPK.zakup.forEach(z =>{
+          z.dataWplywu = moment(z.dataWplywu);
+          z.dataZakupu = moment(z.dataZakupu);
+        })
+        loadedJPK.sprzedaz.forEach(s => {
+          s.dataSprzedazy = moment(s.dataSprzedazy);
+          s.dataWystawienia = moment(s.dataWystawienia);
+        })
         this.state = {
-          jpk: JSON.parse(lastJPKstring)
+          jpk: loadedJPK
         }
       } else {
         this.state = {
           jpk: {
             celZlozenia: "",
-            dataDo: new Date(Date.now()),
-            dataOd: new Date(Date.now()),
-            dataWytworzeniaJPK: new Date(Date.now()),
+            dataDo: moment(),
+            dataOd: moment(),
+            dataWytworzeniaJPK: moment(),
             email: "",
             kodFormularza: "",
             kodSystemowy: "",
@@ -39,8 +52,8 @@ class App extends React.Component<{},{jpk:IJPK}> {
             wersjaSchemy: "1-1",
             zakup: [{
               adresDostawcy: "",
-              dataWplywu: new Date(Date.now()),
-              dataZakupu: new Date(Date.now()),
+              dataWplywu: moment(),
+              dataZakupu: moment(),
               dowodZakupu: "",
               k45: 0,
               k46: 0,
@@ -64,7 +77,7 @@ class App extends React.Component<{},{jpk:IJPK}> {
           <h1 className="App-title">Troche prostsze JPK</h1>
           <link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/9.6.1/css/fabric.min.css"/>
         </header>
-          <JpkNaglowek jpk={this.state.jpk}/>
+          <JpkNaglowek jpk={this.state.jpk} updateJpk={this._updateJPK}/>
           <FakturyZakupu 
             fakturyZakupu={this.state.jpk.zakup}
             addBuyInvoice={this._addBuyInvoice}
@@ -101,8 +114,8 @@ class App extends React.Component<{},{jpk:IJPK}> {
     const newInvoices = [...newJPK.zakup];
     newInvoices.push({
       adresDostawcy: "",
-      dataWplywu: new Date(Date.now()),
-      dataZakupu: new Date(Date.now()),
+      dataWplywu: moment(),
+      dataZakupu: moment(),
       dowodZakupu: "",
       k45: 0,
       k46: 0,
@@ -121,8 +134,8 @@ class App extends React.Component<{},{jpk:IJPK}> {
     const newInvoices = [...newJPK.zakup];
     newInvoices.push({
       adresDostawcy: "",
-      dataWplywu: new Date(Date.now()),
-      dataZakupu: new Date(Date.now()),
+      dataWplywu: moment(),
+      dataZakupu: moment(),
       dowodZakupu: "",
       k45: 0,
       k46: 0,
@@ -152,8 +165,8 @@ class App extends React.Component<{},{jpk:IJPK}> {
     const newInvoices = [...newJPK.sprzedaz];
     newInvoices.push({
       adresKontrahenta: "",
-      dataSprzedazy: new Date(Date.now()),
-      dataWystawienia: new Date(Date.now()),
+      dataSprzedazy: moment(),
+      dataWystawienia: moment(),
       dowodSprzedazy: "",
       k19: 0,
       k20: 0,
@@ -172,8 +185,8 @@ class App extends React.Component<{},{jpk:IJPK}> {
     const newInvoices = [...newJPK.zakup];
     newInvoices.push({
       adresDostawcy: "",
-      dataWplywu: new Date(Date.now()),
-      dataZakupu: new Date(Date.now()),
+      dataWplywu: moment(),
+      dataZakupu: moment(),
       dowodZakupu: "",
       k45: 0,
       k46: 0,
@@ -194,6 +207,13 @@ class App extends React.Component<{},{jpk:IJPK}> {
     newJPK.sprzedaz[index] = invoice;
     this.setState({
       jpk: newJPK
+    })
+  }
+
+  @autobind 
+  private _updateJPK(jpk: IJPK){
+    this.setState({
+      jpk
     })
   }
 }
