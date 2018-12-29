@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IFakturaZakupu } from  "../models/jpk"
+import { IFakturaZakupu, IJPK } from  "../models/jpk"
 import { ActionButton, DetailsList, IColumn, TextField, DatePicker, IconType, Icon, SelectionMode } from "office-ui-fabric-react"
 import {observer} from "mobx-react"
 import {DATEFORMAT} from "../utils/utils"
@@ -10,7 +10,8 @@ import "./faktury.css"
 import * as moment from "moment"
 
 export interface  IFakturyZakupuProps {
-    fakturyZakupu: IFakturaZakupu[],
+    jpk: IJPK,
+    updateJpk: (jpk:IJPK) => void,
     addBuyInvoice: () => void,
     removeBuyInvoice: (index: number) => void,
     updateBuyInvoice: (index: number, invoice: IFakturaZakupu) => void
@@ -87,7 +88,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
                     item.dataZakupu = moment(v);
                     this.props.updateBuyInvoice(index || 0, item);
                 }
-                return <DatePicker value={item.dataZakupu.toDate()} formatDate={this._formatDate} onSelectDate={update} />
+                return <DatePicker value={item.dataZakupu === undefined ? undefined : item.dataZakupu.toDate()} formatDate={this._formatDate} onSelectDate={update} />
             }
         },
         {
@@ -99,7 +100,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
                     item.dataWplywu = moment(v);
                     this.props.updateBuyInvoice(index || 0, item);
                 }
-                return <DatePicker value={item.dataWplywu.toDate()} formatDate={this._formatDate} onSelectDate={update} />
+                return <DatePicker value={item.dataWplywu === undefined ? undefined : item.dataWplywu.toDate()} formatDate={this._formatDate} onSelectDate={update} />
             }
         },
         {
@@ -114,7 +115,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
                         this.props.updateBuyInvoice(index || 0, item);
                     }
                 }
-                return <CurrencyField value={item.k45.toString()} onChange={update} />
+                return <CurrencyField value={item.k45 === undefined ? undefined : item.k45.toString()} onChange={update} />
             }
         },
         {
@@ -129,7 +130,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
                         this.props.updateBuyInvoice(index || 0, item);
                     }
                 }
-                return <CurrencyField value={item.k46.toString()} onChange={update} />
+                return <CurrencyField value={item.k45 === undefined ? undefined : item.k45.toString()} onChange={update} />
             }
         },
         {
@@ -146,7 +147,8 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
         return (
             <div>
                 <h2>Faktury zakupu</h2>
-                <DetailsList items={this.props.fakturyZakupu} selectionMode={SelectionMode.none} columns = {this.columns}/>
+                <DetailsList items={this.props.jpk.zakup} selectionMode={SelectionMode.none} columns = {this.columns}/>
+                <CurrencyField value={this.props.jpk.podatekZakup.toString()} />
                 <ActionButton iconProps={{ iconName: 'Add', iconType: IconType.default }} text="Dodaj" onClick={this.props.addBuyInvoice} />
 
             </div>
@@ -156,6 +158,12 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
 
     private _formatDate(date:Date){
         return df(date,DATEFORMAT)
+    }
+
+    private _updateTax(event: React.FormEvent, val: string){
+        let newJPK = {...this.props.jpk}
+        newJPK.podatekZakup = numeral(val).value();
+        this.props.updateJpk(newJPK);
     }
     
 

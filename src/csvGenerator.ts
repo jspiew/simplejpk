@@ -47,8 +47,8 @@ function getSellRows(jpk: IJPK){
         invRow.NazwaKontrahenta = invoice.nazwaKontrahenta;
         invRow.AdresKontrahenta = invoice.adresKontrahenta;
         invRow.DowodSprzedazy = invoice.dowodSprzedazy;
-        invRow.DataWystawienia = formatDate(invoice.dataWystawienia,false);
-        invRow.DataSprzedazy = formatDate(invoice.dataSprzedazy, false);
+        invRow.DataWystawienia = formatDate(invoice.dataWystawienia as Moment,false);
+        invRow.DataSprzedazy = formatDate(invoice.dataSprzedazy as Moment, false);
         invRow.K_19 = numeral(invoice.k19).format("0,00");
         invRow.K_20 = numeral(invoice.k20).format("0,00");      
         rows.push(invRow);
@@ -70,8 +70,8 @@ function getBuyRows(jpk: IJPK) {
         invRow.NazwaDostawcy = invoice.nazwaDostawcy;
         invRow.AdresDostawcy = invoice.adresDostawcy;
         invRow.DowodZakupu = invoice.dowodZakupu;
-        invRow.DataZakupu = formatDate(invoice.dataZakupu,false);
-        invRow.DataWplywu = formatDate(invoice.dataWplywu,false);
+        invRow.DataZakupu = formatDate(invoice.dataZakupu as Moment,false);
+        invRow.DataWplywu = formatDate(invoice.dataWplywu as Moment,false);
         invRow.K_45 = numeral(invoice.k45).format("0,00");
         invRow.K_46 = numeral(invoice.k46).format("0,00");
         rows.push(invRow);

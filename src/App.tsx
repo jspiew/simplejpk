@@ -38,25 +38,22 @@ class App extends React.Component<{},{jpk:IJPK}> {
       } else {
         this.state = {
           jpk: {
-            celZlozenia: "",
-            dataDo: moment(),
-            dataOd: moment(),
+            dataDo: moment().endOf("month"),
+            dataOd: moment().startOf("month"),
             dataWytworzeniaJPK: moment(),
             email: "",
-            kodFormularza: "",
-            kodSystemowy: "",
-            nazwaSystemu: "Excel",
             nip: "",
             pelnaNazwa: "",
+            podatekSprzedaz: 0,
+            podatekZakup: 0,
             sprzedaz: [],
-            wersjaSchemy: "1-1",
             zakup: [{
               adresDostawcy: "",
-              dataWplywu: moment(),
-              dataZakupu: moment(),
+              dataWplywu: undefined,
+              dataZakupu: undefined,
               dowodZakupu: "",
-              k45: 0,
-              k46: 0,
+              k45: undefined,
+              k46: undefined,
               nazwaDostawcy: "",
               nrDostawcy: ""
             }]
@@ -83,13 +80,15 @@ class App extends React.Component<{},{jpk:IJPK}> {
             addBuyInvoice={this._addBuyInvoice}
             removeBuyInvoice = {this._removeBuyInvoice}
             updateBuyInvoice = {this._updateBuyInvoice}
-          />
+            updateJPK = {this._updateJPK}
+          />          
 
           <FakturySprzedazy
             fakturyZakupu={this.state.jpk.sprzedaz}
             addSellInvoice={this._addSellInvoice}
             removeSellInvoice={this._removeSellInvoice}
             updateSellInvoice={this._updateSellInvoice}
+            updateJPK={this._updateJPK}
           />
         <a onClick={this._getCSV}>CSV</a>
         {window.location.search.indexOf("dbg") >= 0 && <code>

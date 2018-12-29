@@ -84,7 +84,7 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
                     item.dataWystawienia = moment(v);
                     this.props.updateSellInvoice(index || 0, item);
                 }
-                return <DatePicker value={item.dataWystawienia.toDate()} onSelectDate={update} />
+                return <DatePicker value={item.dataWystawienia === undefined ? undefined : item.dataWystawienia.toDate()} onSelectDate={update} />
             }
         },
         {
@@ -96,7 +96,7 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
                     item.dataSprzedazy = moment(v);
                     this.props.updateSellInvoice(index || 0, item);
                 }
-                return <DatePicker value={item.dataSprzedazy.toDate()} onSelectDate={update} />
+                return <DatePicker value={item.dataSprzedazy === undefined ? undefined : item.dataSprzedazy.toDate()} onSelectDate={update} />
             }
         },
         {
@@ -111,7 +111,7 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
                         this.props.updateSellInvoice(index || 0, item);
                     }
                 }
-                return <CurrencyField value={item.k19.toString()} onChange={update} />
+                return <CurrencyField value={item.k19 === undefined ? undefined : item.k19.toString()} onChange={update} />
             }
         },
         {
@@ -126,7 +126,7 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
                         this.props.updateSellInvoice(index || 0, item);
                     }
                 }
-                return <CurrencyField value={item.k19.toString()} onChange={update} />
+                return <CurrencyField value={item.k20 === undefined ? undefined : item.k20.toString()} onChange={update} />
             }
         },
         {
