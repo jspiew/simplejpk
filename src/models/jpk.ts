@@ -21,6 +21,7 @@ export interface IFakturaSprzedazy {
     dowodSprzedazy: string,
     dataWystawienia?: Moment,
     dataSprzedazy?: Moment,
+    vat: number,
     k19: number | undefined,
     k20: number | undefined
 }
@@ -32,6 +33,7 @@ export interface IFakturaZakupu {
     dowodZakupu: string,
     dataZakupu: Moment | undefined,
     dataWplywu: Moment | undefined,
+    vat: number,
     k45: number | undefined,
     k46: number | undefined
 }

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IFakturaZakupu, IJPK } from  "../models/jpk"
-import { ActionButton, DetailsList, IColumn, TextField, DatePicker, IconType, Icon, SelectionMode } from "office-ui-fabric-react"
+import { ActionButton, DetailsList, IColumn, TextField, DatePicker, IconType, Icon, SelectionMode, Slider } from "office-ui-fabric-react"
 import {observer} from "mobx-react"
 import {DATEFORMAT} from "../utils/utils"
 import * as numeral from "numeral"
@@ -20,6 +20,7 @@ export interface  IFakturyZakupuProps {
 @observer
 export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
 
+    private k45timeout = -1;
     private columns: IColumn[] = [
         {
             key: "lp",
@@ -119,6 +120,21 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
             }
         },
         {
+            key: "vat",
+            name: "VAT",
+            minWidth: 100,
+            onRender: (item: IFakturaZakupu, index) => {
+                const update = (val: number) => {
+                    item.vat = val;
+                    if (item.k45) {
+                        item.k46 = parseFloat((item.k45 * (1 + val / 100)).toFixed(2));
+                    }
+                    this.props.updateBuyInvoice(index || 0, item);
+                }
+                return <Slider min={0} max={23} value = {item.vat} onChange={update}/>
+            }
+        },
+        {
             key: "k46",
             name: "K46",
             minWidth: 150,
@@ -130,7 +146,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
                         this.props.updateBuyInvoice(index || 0, item);
                     }
                 }
-                return <CurrencyField value={item.k45 === undefined ? undefined : item.k45.toString()} onChange={update} />
+                return <CurrencyField value={item.k46 === undefined ? undefined : item.k46.toString()} onChange={update} />
             }
         },
         {
@@ -148,7 +164,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
             <div>
                 <h2>Faktury zakupu</h2>
                 <DetailsList items={this.props.jpk.zakup} selectionMode={SelectionMode.none} columns = {this.columns}/>
-                <CurrencyField value={this.props.jpk.podatekZakup.toString()} />
+                <CurrencyField value={this.props.jpk.podatekZakup.toString()} onChange={this._updateTax}/>
                 <ActionButton iconProps={{ iconName: 'Add', iconType: IconType.default }} text="Dodaj" onClick={this.props.addBuyInvoice} />
 
             </div>
@@ -161,7 +177,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
     }
 
     private _updateTax(event: React.FormEvent, val: string){
-        let newJPK = {...this.props.jpk}
+        const newJPK = {...this.props.jpk}
         newJPK.podatekZakup = numeral(val).value();
         this.props.updateJpk(newJPK);
     }

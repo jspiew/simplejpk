@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { IFakturaSprzedazy } from  "../models/jpk"
-import { Icon, DefaultButton, DetailsList, IColumn, TextField, DatePicker, IconType, SelectionMode } from "office-ui-fabric-react"
+import { IFakturaSprzedazy, IJPK } from  "../models/jpk"
+import { Icon, DefaultButton, DetailsList, IColumn, TextField, DatePicker, IconType, SelectionMode, Slider } from "office-ui-fabric-react"
 import {observer} from "mobx-react"
 import { CurrencyField } from './CurrencyFields';
 import "./faktury.css"
@@ -8,7 +8,8 @@ import * as numeral from "numeral"
 import * as moment from 'moment'
 
 export interface  IFakturySprzedazyProps {
-    fakturyZakupu: IFakturaSprzedazy[],
+    jpk: IJPK,
+    updateJpk: (jpk: IJPK) => void,
     addSellInvoice: () => void,
     removeSellInvoice: (index: number) => void,
     updateSellInvoice: (index: number, invoice: IFakturaSprzedazy) => void
@@ -115,6 +116,21 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
             }
         },
         {
+            key: "vat",
+            name: "VAT",
+            minWidth: 100,
+            onRender: (item: IFakturaSprzedazy, index) => {
+                const update = (val: number) => {
+                    item.vat = val;
+                    if (item.k19) {
+                        item.k20 = item.k19 * (1 + val/100);
+                    }
+                    this.props.updateSellInvoice(index || 0, item);
+                }
+                return <Slider min={0} max={23} value={item.vat} onChange={update} />
+            }
+        },
+        {
             key: "k20",
             name: "K20",
             minWidth: 100,
@@ -143,12 +159,19 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
         return (
             <div>
                 <h2>Faktury sprzedaży</h2>
-                <DetailsList items = {this.props.fakturyZakupu} selectionMode={SelectionMode.none} columns = {this.columns}/>
+                <DetailsList items = {this.props.jpk.sprzedaz} selectionMode={SelectionMode.none} columns = {this.columns}/>
+                <CurrencyField value={this.props.jpk.podatekZakup.toString()} onChange={this._updateTax} />
                 <DefaultButton iconProps={{ iconName: 'Add', iconType: IconType.default }} text="Dodaj" onClick={this.props.addSellInvoice} />
 
             </div>
             
         );
+    }
+
+    private _updateTax(event: React.FormEvent, val: string) {
+        const newJPK = { ...this.props.jpk }
+        newJPK.podatekSprzedaz = numeral(val).value();
+        this.props.updateJpk(newJPK);
     }
 
 }

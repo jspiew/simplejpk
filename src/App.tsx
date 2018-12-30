@@ -53,6 +53,7 @@ class App extends React.Component<{},{jpk:IJPK}> {
               dataZakupu: undefined,
               dowodZakupu: "",
               k45: undefined,
+              vat: 23,
               k46: undefined,
               nazwaDostawcy: "",
               nrDostawcy: ""
@@ -76,19 +77,19 @@ class App extends React.Component<{},{jpk:IJPK}> {
         </header>
           <JpkNaglowek jpk={this.state.jpk} updateJpk={this._updateJPK}/>
           <FakturyZakupu 
-            fakturyZakupu={this.state.jpk.zakup}
+            jpk = {this.state.jpk}
             addBuyInvoice={this._addBuyInvoice}
             removeBuyInvoice = {this._removeBuyInvoice}
             updateBuyInvoice = {this._updateBuyInvoice}
-            updateJPK = {this._updateJPK}
+            updateJpk = {this._updateJPK}
           />          
 
           <FakturySprzedazy
-            fakturyZakupu={this.state.jpk.sprzedaz}
+            jpk={this.state.jpk}
             addSellInvoice={this._addSellInvoice}
             removeSellInvoice={this._removeSellInvoice}
             updateSellInvoice={this._updateSellInvoice}
-            updateJPK={this._updateJPK}
+            updateJpk={this._updateJPK}
           />
         <a onClick={this._getCSV}>CSV</a>
         {window.location.search.indexOf("dbg") >= 0 && <code>
@@ -117,6 +118,7 @@ class App extends React.Component<{},{jpk:IJPK}> {
       dataZakupu: moment(),
       dowodZakupu: "",
       k45: 0,
+      vat: 23,
       k46: 0,
       nazwaDostawcy: "",
       nrDostawcy: ""
@@ -137,6 +139,7 @@ class App extends React.Component<{},{jpk:IJPK}> {
       dataZakupu: moment(),
       dowodZakupu: "",
       k45: 0,
+      vat: 23,
       k46: 0,
       nazwaDostawcy: "",
       nrDostawcy: ""
@@ -168,6 +171,7 @@ class App extends React.Component<{},{jpk:IJPK}> {
       dataWystawienia: moment(),
       dowodSprzedazy: "",
       k19: 0,
+      vat: 23,
       k20: 0,
       nazwaKontrahenta: "",
       nrKontrahenta: ""
@@ -188,6 +192,7 @@ class App extends React.Component<{},{jpk:IJPK}> {
       dataZakupu: moment(),
       dowodZakupu: "",
       k45: 0,
+      vat: 23,
       k46: 0,
       nazwaDostawcy: "",
       nrDostawcy: ""
