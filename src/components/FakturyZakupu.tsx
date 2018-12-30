@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IFakturaZakupu, IJPK } from  "../models/jpk"
-import { ActionButton, DetailsList, IColumn, TextField, DatePicker, IconType, Icon, SelectionMode, Slider } from "office-ui-fabric-react"
+import { ActionButton, DetailsList, IColumn, TextField, DatePicker, IconType, Icon, SelectionMode, SpinButton } from "office-ui-fabric-react"
 import {observer} from "mobx-react"
 import {DATEFORMAT} from "../utils/utils"
 import * as numeral from "numeral"
@@ -20,7 +20,7 @@ export interface  IFakturyZakupuProps {
 @observer
 export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
 
-    private k45timeout = -1;
+    // private k45timeout = -1;
     private columns: IColumn[] = [
         {
             key: "lp",
@@ -113,6 +113,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
                     const numValue = numeral(v).value();
                     if (!isNaN(numValue) && item.k45 !== numValue){
                         item.k45 = numValue;
+                        item.k46 = parseFloat((item.k45 * (1 + item.vat / 100)).toFixed(2));
                         this.props.updateBuyInvoice(index || 0, item);
                     }
                 }
@@ -124,14 +125,14 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
             name: "VAT",
             minWidth: 100,
             onRender: (item: IFakturaZakupu, index) => {
-                const update = (val: number) => {
-                    item.vat = val;
+                const update = (val: string) => {
+                    item.vat = numeral(val).value();
                     if (item.k45) {
-                        item.k46 = parseFloat((item.k45 * (1 + val / 100)).toFixed(2));
+                        item.k46 = parseFloat((item.k45 * (1 + item.vat / 100)).toFixed(2));
                     }
                     this.props.updateBuyInvoice(index || 0, item);
                 }
-                return <Slider min={0} max={23} value = {item.vat} onChange={update}/>
+                return <SpinButton min={0} max={23} step={1} value = {item.vat.toString()} onIncrement={update} onDecrement={update}/>
             }
         },
         {
