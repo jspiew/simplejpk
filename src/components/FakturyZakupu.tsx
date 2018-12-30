@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { IFakturaZakupu, IJPK } from  "../models/jpk"
-import { ActionButton, DetailsList, IColumn, TextField, DatePicker, IconType, Icon, SelectionMode, SpinButton } from "office-ui-fabric-react"
+import { ActionButton, DetailsList, IColumn, TextField, DatePicker, IconType, Icon, SelectionMode, Dropdown, IDropdownOption } from "office-ui-fabric-react"
 import {observer} from "mobx-react"
-import {DATEFORMAT} from "../utils/utils"
+import {DATEFORMAT, VATRATES} from "../utils/utils"
 import * as numeral from "numeral"
 import * as df from "dateformat"
 import {CurrencyField} from "../components/CurrencyFields"
@@ -65,7 +65,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
                     item.adresDostawcy = v;
                     this.props.updateBuyInvoice(index || 0, item);
                 }
-                return <TextField value={item.adresDostawcy} multiline={true} rows={4} onChanged={update} />
+                return <TextField value={item.adresDostawcy} multiline={true} rows={2} onChanged={update} />
             }
         },
         {
@@ -123,16 +123,22 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
         {
             key: "vat",
             name: "VAT",
-            minWidth: 100,
+            minWidth: 75,
             onRender: (item: IFakturaZakupu, index) => {
-                const update = (val: string) => {
-                    item.vat = numeral(val).value();
+                const update = (event: React.FormEvent, val: IDropdownOption) => {
+                    item.vat = numeral(val.key).value();
                     if (item.k45) {
                         item.k46 = parseFloat((item.k45 * (1 + item.vat / 100)).toFixed(2));
                     }
                     this.props.updateBuyInvoice(index || 0, item);
+                    return item.vat.toString()
                 }
-                return <SpinButton min={0} max={23} step={1} value = {item.vat.toString()} onIncrement={update} onDecrement={update}/>
+                return <Dropdown defaultSelectedKey = {item.vat} options = {VATRATES.map<IDropdownOption>(r => {
+                    return {
+                        key: r,
+                        text: `${r}%`
+                    }
+                })} onChange={update} />
             }
         },
         {
