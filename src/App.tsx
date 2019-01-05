@@ -130,32 +130,28 @@ class App extends React.Component<{},{jpk:IJPK}> {
   }
 
   @autobind
-  private _removeBuyInvoice() {
+  private _removeBuyInvoice(index: number) {
     const newJPK = { ...this.state.jpk };
     const newInvoices = [...newJPK.zakup];
-    newInvoices.push({
-      adresDostawcy: "",
-      dataWplywu: moment(),
-      dataZakupu: moment(),
-      dowodZakupu: "",
-      k45: 0,
-      vat: 23,
-      k46: 0,
-      nazwaDostawcy: "",
-      nrDostawcy: ""
-    })
-    newJPK.zakup = newInvoices
+    newInvoices.splice(index,1);
+    newJPK.zakup = newInvoices;
     this.setState({
       jpk: newJPK
     })
   }
 
   @autobind
-  private _updateBuyInvoice(index: number, invoice: IFakturaZakupu) {
+  private _updateBuyInvoice(index: number, invoice: IFakturaZakupu, recalculateTax = false) {
     const newJPK = { ...this.state.jpk };
     const newInvoices = [...newJPK.zakup];
     newJPK.zakup = newInvoices;
     newJPK.zakup[index] = invoice;
+    if(recalculateTax){
+      const newTax =  newJPK.zakup.map(f => f.k46).reduce((prev,next) => (prev || 0) + (next || 0));
+      if(newTax){
+        newJPK.podatekZakup = newTax
+      }
+    }
     this.setState({
       jpk: newJPK
     })
@@ -183,20 +179,10 @@ class App extends React.Component<{},{jpk:IJPK}> {
   }
 
   @autobind
-  private _removeSellInvoice() {
+  private _removeSellInvoice(index: number) {
     const newJPK = { ...this.state.jpk };
     const newInvoices = [...newJPK.zakup];
-    newInvoices.push({
-      adresDostawcy: "",
-      dataWplywu: moment(),
-      dataZakupu: moment(),
-      dowodZakupu: "",
-      k45: 0,
-      vat: 23,
-      k46: 0,
-      nazwaDostawcy: "",
-      nrDostawcy: ""
-    })
+    newInvoices.splice(index, 1);
     newJPK.zakup = newInvoices
     this.setState({
       jpk: newJPK

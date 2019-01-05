@@ -6,3 +6,14 @@
     color: darkRed;
     cursor: pointer;
 }
+
+.taxField {
+    max-width: 200px;
+    float:right;
+    margin:15px;
+}
+
+.addInvoiceButton{
+    float: right;
+    margin: 15px;
+}

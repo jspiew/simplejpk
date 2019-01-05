@@ -14,7 +14,7 @@ export interface  IFakturyZakupuProps {
     updateJpk: (jpk:IJPK) => void,
     addBuyInvoice: () => void,
     removeBuyInvoice: (index: number) => void,
-    updateBuyInvoice: (index: number, invoice: IFakturaZakupu) => void
+    updateBuyInvoice: (index: number, invoice: IFakturaZakupu, recalculateTax?: boolean) => void
 } 
 
 @observer
@@ -113,8 +113,8 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
                     const numValue = numeral(v).value();
                     if (!isNaN(numValue) && item.k45 !== numValue){
                         item.k45 = numValue;
-                        item.k46 = parseFloat((item.k45 * (1 + item.vat / 100)).toFixed(2));
-                        this.props.updateBuyInvoice(index || 0, item);
+                        item.k46 = parseFloat((item.k45 * (item.vat / 100)).toFixed(2));
+                        this.props.updateBuyInvoice(index || 0, item, true);
                     }
                 }
                 return <CurrencyField value={item.k45 === undefined ? undefined : item.k45.toString()} onChange={update} />
@@ -130,7 +130,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
                     if (item.k45) {
                         item.k46 = parseFloat((item.k45 * (1 + item.vat / 100)).toFixed(2));
                     }
-                    this.props.updateBuyInvoice(index || 0, item);
+                    this.props.updateBuyInvoice(index || 0, item, true);
                     return item.vat.toString()
                 }
                 return <Dropdown defaultSelectedKey = {item.vat} options = {VATRATES.map<IDropdownOption>(r => {
@@ -150,7 +150,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
                     const numValue = numeral(v).value();
                     if (!isNaN(numValue) && item.k46 !== numValue) {
                         item.k46 = numValue;
-                        this.props.updateBuyInvoice(index || 0, item);
+                        this.props.updateBuyInvoice(index || 0, item, true);
                     }
                 }
                 return <CurrencyField value={item.k46 === undefined ? undefined : item.k46.toString()} onChange={update} />
@@ -160,8 +160,11 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
             key: "delete",
             name: "Usun",
             minWidth: 30,
-            onRender: (item: IFakturaZakupu, index) => {
-                return <Icon className="deleteIcon" iconType={IconType.default} iconName="Delete" />
+            onRender: (item: IFakturaZakupu, index: number) => {
+                const remove = ()=>{
+                    this.props.removeBuyInvoice(index);
+                }
+                return <Icon className="deleteIcon" iconType={IconType.default} iconName="Delete" onClick={remove}/>
             }
         }
     ]
@@ -171,9 +174,8 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
             <div>
                 <h2>Faktury zakupu</h2>
                 <DetailsList items={this.props.jpk.zakup} selectionMode={SelectionMode.none} columns = {this.columns}/>
-                <CurrencyField value={this.props.jpk.podatekZakup.toString()} onChange={this._updateTax}/>
-                <ActionButton iconProps={{ iconName: 'Add', iconType: IconType.default }} text="Dodaj" onClick={this.props.addBuyInvoice} />
-
+                <CurrencyField className="taxField" label="Podatek" value={this.props.jpk.podatekZakup.toString()} onChange={this._updateTax}/><br />
+                <ActionButton className="addInvoiceButton" iconProps={{ iconName: 'Add', iconType: IconType.default }} text="Dodaj" onClick={this.props.addBuyInvoice} /><br />
             </div>
             
         );
