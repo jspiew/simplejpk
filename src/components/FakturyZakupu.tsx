@@ -128,7 +128,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
                 const update = (event: React.FormEvent, val: IDropdownOption) => {
                     item.vat = numeral(val.key).value();
                     if (item.k45) {
-                        item.k46 = parseFloat((item.k45 * (1 + item.vat / 100)).toFixed(2));
+                        item.k46 = parseFloat((item.k45 * (item.vat / 100)).toFixed(2));
                     }
                     this.props.updateBuyInvoice(index || 0, item, true);
                     return item.vat.toString()
@@ -164,7 +164,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
                 const remove = ()=>{
                     this.props.removeBuyInvoice(index);
                 }
-                return <Icon className="deleteIcon" iconType={IconType.default} iconName="Delete" onClick={remove}/>
+                return <div><Icon className="deleteIcon" iconType={IconType.default} iconName="Delete" onClick={remove} /><Icon className="deleteIcon" iconType={IconType.default} iconName="Copy" onClick={remove} /></div>
             }
         }
     ]

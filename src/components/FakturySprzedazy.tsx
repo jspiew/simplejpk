@@ -123,7 +123,7 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
                 const update = (val: number) => {
                     item.vat = val;
                     if (item.k19) {
-                        item.k20 = item.k19 * (1 + val/100);
+                        item.k20 = item.k19 * (val/100);
                     }
                     this.props.updateSellInvoice(index || 0, item);
                 }
