@@ -2,7 +2,7 @@ import * as React from 'react';
 import { IFakturaZakupu, IJPK } from  "../models/jpk"
 import { ActionButton, DetailsList, IColumn, TextField, DatePicker, IconType, Icon, SelectionMode, Dropdown, IDropdownOption, TooltipHost } from "office-ui-fabric-react"
 import {observer} from "mobx-react"
-import {DATEFORMAT, VATRATES} from "../utils/utils"
+import {DATEFORMAT, VATRATES, validateRequired} from "../utils/utils"
 import * as numeral from "numeral"
 import * as df from "dateformat"
 import {CurrencyField} from "../components/CurrencyFields"
@@ -30,7 +30,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
             maxWidth: 15,
             className : "invoiceDetailsCell",
             onRender: (item,index) => {
-                return <span className="invoiceNumberSpan">{(index|| 0)+1}</span>
+                return <div className="invoiceNumberSpan">{(index|| 0)+1}</div>
             }
         },
         {
@@ -44,7 +44,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
                     item.nrDostawcy = v;
                     this.props.updateBuyInvoice(index || 0, item);
                 }
-                return <TextField value={item.nrDostawcy} onChanged= {update}/>
+                return <TextField value={item.nrDostawcy} onGetErrorMessage={validateRequired} onChanged= {update}/>
             }
         },
         {
@@ -58,7 +58,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
                     item.nazwaDostawcy = v;
                     this.props.updateBuyInvoice(index || 0, item);
                 }
-                return <TextField value={item.nazwaDostawcy} onChanged={update} />
+                return <TextField value={item.nazwaDostawcy} onChanged={update} onGetErrorMessage={validateRequired} />
             }
         },
         {
@@ -72,7 +72,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
                     item.adresDostawcy = v;
                     this.props.updateBuyInvoice(index || 0, item);
                 }
-                return <TextField value={item.adresDostawcy} multiline={true} rows={2} onChanged={update} />
+                return <TextField value={item.adresDostawcy} multiline={true} rows={2} onChanged={update} onGetErrorMessage={validateRequired} />
             }
         },
         {
@@ -85,7 +85,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
                     item.dowodZakupu = v;
                     this.props.updateBuyInvoice(index || 0, item);
                 }
-                return <TextField value={item.dowodZakupu} onChanged={update} />
+                return <TextField value={item.dowodZakupu} onChanged={update} onGetErrorMessage={validateRequired} />
             }
         },
         {
@@ -98,7 +98,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
                     item.dataZakupu = moment(v);
                     this.props.updateBuyInvoice(index || 0, item);
                 }
-                return <DatePicker value={item.dataZakupu === undefined ? undefined : item.dataZakupu.toDate()} formatDate={this._formatDate} onSelectDate={update} />
+                return <DatePicker value={item.dataZakupu === undefined ? undefined : item.dataZakupu.toDate()} formatDate={this._formatDate} onSelectDate={update}  />
             }
         },
         {
@@ -121,7 +121,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
             minWidth: 75,
             onRender: (item: IFakturaZakupu, index) => {
                 const update = (event: React.FormEvent, v: string | undefined) => {
-                    const numValue = numeral(v).value();
+                    const numValue = numeral(v || 0).value();
                     if (!isNaN(numValue) && item.k45 !== numValue){
                         item.k45 = numValue;
                         item.k46 = parseFloat((item.k45 * (item.vat / 100)).toFixed(2));
@@ -160,7 +160,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
             minWidth: 75,
             onRender: (item: IFakturaZakupu, index) => {
                 const update = (event: React.FormEvent, v: string | undefined) => {
-                    const numValue = numeral(v).value();
+                    const numValue = numeral(v || 0).value();
                     if (!isNaN(numValue) && item.k46 !== numValue) {
                         item.k46 = numValue;
                         this.props.updateBuyInvoice(index || 0, item, true);

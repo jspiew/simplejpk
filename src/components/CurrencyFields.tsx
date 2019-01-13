@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { TextField, ITextFieldProps, autobind} from "office-ui-fabric-react"
 import * as numeral from "numeral"
+import { validateRequired } from 'src/utils/utils';
 
 
 export interface ICurrencyFieldProps {
@@ -32,8 +33,11 @@ export class CurrencyField extends React.Component<ITextFieldProps, { recognized
     }
 
     private _onGetErrorMessage(val:string){
-        if (isNaN(numeral(val).value())) { return "Nie rozpoznano liczby"}
-        else { return }
+        const ret = validateRequired(val);
+        if (ret) {return ret}
+        else if (isNaN(numeral(val).value())) { return "Nie rozpoznano liczby"}
+        else if(numeral(val).value() <= 0) {return "Wartość dodatnia"}
+        else { return ""}
     }
 
     @autobind
