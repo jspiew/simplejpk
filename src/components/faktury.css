@@ -18,3 +18,15 @@
     float: right;
     margin: 15px;
 }
+
+.invoiceDetailsCell {
+    padding: 2px;
+}
+
+.invoiceDetailsCell input {
+    padding: 3px;
+}
+
+.invoiceNumberSpan {
+    text-align: center
+}

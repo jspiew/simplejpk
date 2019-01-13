@@ -79,6 +79,7 @@ class App extends React.Component<{},{jpk:IJPK}> {
           <FakturyZakupu 
             jpk = {this.state.jpk}
             addBuyInvoice={this._addBuyInvoice}
+            copyBuyInvoice = {this._copyBuyInvoice}
             removeBuyInvoice = {this._removeBuyInvoice}
             updateBuyInvoice = {this._updateBuyInvoice}
             updateJpk = {this._updateJPK}
@@ -87,6 +88,7 @@ class App extends React.Component<{},{jpk:IJPK}> {
           <FakturySprzedazy
             jpk={this.state.jpk}
             addSellInvoice={this._addSellInvoice}
+            copySellInvoice = {this._copySellInvoice}
             removeSellInvoice={this._removeSellInvoice}
             updateSellInvoice={this._updateSellInvoice}
             updateJpk={this._updateJPK}
@@ -130,6 +132,18 @@ class App extends React.Component<{},{jpk:IJPK}> {
   }
 
   @autobind
+  private _copyBuyInvoice(index:number) {
+    const newJPK = { ...this.state.jpk };
+    const newInvoices = [...newJPK.zakup];
+    const newInvoice  = {...newInvoices[index]}
+    newInvoices.push(newInvoice);
+    newJPK.zakup = newInvoices;
+    this.setState({
+      jpk: newJPK
+    })
+  }
+
+  @autobind
   private _removeBuyInvoice(index: number) {
     const newJPK = { ...this.state.jpk };
     const newInvoices = [...newJPK.zakup];
@@ -149,7 +163,7 @@ class App extends React.Component<{},{jpk:IJPK}> {
     if(recalculateTax){
       const newTax =  newJPK.zakup.map(f => f.k46).reduce((prev,next) => (prev || 0) + (next || 0));
       if(newTax){
-        newJPK.podatekZakup = newTax
+        newJPK.podatekZakup = parseFloat(newTax.toFixed(2));
       }
     }
     this.setState({
@@ -173,6 +187,18 @@ class App extends React.Component<{},{jpk:IJPK}> {
       nrKontrahenta: ""
     })
     newJPK.sprzedaz = newInvoices
+    this.setState({
+      jpk: newJPK
+    })
+  }
+
+  @autobind
+  private _copySellInvoice(index: number) {
+    const newJPK = { ...this.state.jpk };
+    const newInvoices = [...newJPK.sprzedaz];
+    const newInvoice = { ...newInvoices[index] }
+    newInvoices.push(newInvoice);
+    newJPK.sprzedaz = newInvoices;
     this.setState({
       jpk: newJPK
     })

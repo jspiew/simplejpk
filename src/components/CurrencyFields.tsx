@@ -1,8 +1,11 @@
 import * as React from 'react';
-import { TextField, ITextFieldProps} from "office-ui-fabric-react"
+import { TextField, ITextFieldProps, autobind} from "office-ui-fabric-react"
 import * as numeral from "numeral"
 
 
+export interface ICurrencyFieldProps {
+    precision? : number
+}
 
 
 export class CurrencyField extends React.Component<ITextFieldProps, { recognizedNumber: number | null}> {
@@ -19,8 +22,8 @@ export class CurrencyField extends React.Component<ITextFieldProps, { recognized
         return (
             <div>
                 <TextField {...this.props}
-                    suffix = "PLN"
                     onGetErrorMessage = {this._onGetErrorMessage}
+                    onBlur = {this._formatValue}
                     // onChange = {this._mergedChange}
                     // value = {formattedValue}
                 />
@@ -28,36 +31,17 @@ export class CurrencyField extends React.Component<ITextFieldProps, { recognized
         );
     }
 
-    // @autobind
-    // private _getFormattedValue(val: string|undefined){
-    //     if(val){
-    //         const numeralVal = numeral(val);
-    //         if (isNaN(numeralVal.value())){
-    //             return "";       
-    //         } else {
-    //             return numeralVal.format("0,0.");
-    //         }        
-    //     } else {
-    //         return "";
-    //     }
-    // }
-
-    // @autobind
-    // private _mergedChange(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue:string|undefined) {
-    //     const numValue = numeral(newValue).value();
-    //     if(!isNaN(numValue)) {
-    //         this.setState({
-    //             recognizedNumber: numValue
-    //         })
-    //     }
-    //     if(this.props.onChange){
-    //         this.props.onChange(event,newValue);
-    //     }
-    // }
-
     private _onGetErrorMessage(val:string){
         if (isNaN(numeral(val).value())) { return "Nie rozpoznano liczby"}
         else { return }
+    }
+
+    @autobind
+    private _formatValue(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>){
+        const newValue = numeral(this.props.value).format("0.00");
+        if (this.props.onChange) {
+            this.props.onChange(event,newValue);
+        }
     }
 
 

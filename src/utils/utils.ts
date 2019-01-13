@@ -1,6 +1,6 @@
 import * as df from "dateformat"
 
-export const DATEFORMAT = "dd-mmm-yyyy";
+export const DATEFORMAT = "dd-mm-yyyy";
 export function _formatDate(date: Date){
     return df(date, DATEFORMAT)
 }

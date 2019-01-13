@@ -11,6 +11,7 @@ export interface  IFakturySprzedazyProps {
     jpk: IJPK,
     updateJpk: (jpk: IJPK) => void,
     addSellInvoice: () => void,
+    copySellInvoice: (index: number) => void,
     removeSellInvoice: (index: number) => void,
     updateSellInvoice: (index: number, invoice: IFakturaSprzedazy) => void
 } 

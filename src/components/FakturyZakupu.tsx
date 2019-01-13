@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IFakturaZakupu, IJPK } from  "../models/jpk"
-import { ActionButton, DetailsList, IColumn, TextField, DatePicker, IconType, Icon, SelectionMode, Dropdown, IDropdownOption } from "office-ui-fabric-react"
+import { ActionButton, DetailsList, IColumn, TextField, DatePicker, IconType, Icon, SelectionMode, Dropdown, IDropdownOption, TooltipHost } from "office-ui-fabric-react"
 import {observer} from "mobx-react"
 import {DATEFORMAT, VATRATES} from "../utils/utils"
 import * as numeral from "numeral"
@@ -13,6 +13,7 @@ export interface  IFakturyZakupuProps {
     jpk: IJPK,
     updateJpk: (jpk:IJPK) => void,
     addBuyInvoice: () => void,
+    copyBuyInvoice: (index: number) => void,
     removeBuyInvoice: (index: number) => void,
     updateBuyInvoice: (index: number, invoice: IFakturaZakupu, recalculateTax?: boolean) => void
 } 
@@ -25,16 +26,19 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
         {
             key: "lp",
             name: "LP",
-            minWidth: 30,
-            maxWidth: 30,
+            minWidth: 15,
+            maxWidth: 15,
+            className : "invoiceDetailsCell",
             onRender: (item,index) => {
-                return <span>{(index|| 0)+1}</span>
+                return <span className="invoiceNumberSpan">{(index|| 0)+1}</span>
             }
         },
         {
             key: "nrDostawcy",
             name: "Numer dostawcy",
-            minWidth: 100,
+            className: "invoiceDetailsCell",
+            minWidth: 120,
+            maxWidth: 120,
             onRender: (item:IFakturaZakupu, index) => {
                 const update = (v:string) => {
                     item.nrDostawcy = v;
@@ -46,8 +50,9 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
         {
             key: "nazwaDostawcy",
             name: "Nazwa Dostawcy",
-            minWidth: 150,
-            maxWidth: 200,
+            className: "invoiceDetailsCell",
+            minWidth: 170,
+            maxWidth: 170,
             onRender: (item: IFakturaZakupu, index) => {
                 const update = (v: string) => {
                     item.nazwaDostawcy = v;
@@ -59,7 +64,9 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
         {
             key: "adresDostawct",
             name: "Adres Dostawcy",
+            className : "invoiceDetailsCell",
             minWidth: 200,
+            maxWidth: 200,
             onRender: (item: IFakturaZakupu, index) => {
                 const update = (v: string) => {
                     item.adresDostawcy = v;
@@ -71,7 +78,8 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
         {
             key: "dowodZakupu",
             name: "Dowód Zakupu",
-            minWidth: 100,
+            className: "invoiceDetailsCell",
+            minWidth: 250,
             onRender: (item: IFakturaZakupu, index) => {
                 const update = (v: string) => {
                     item.dowodZakupu = v;
@@ -83,7 +91,8 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
         {
             key: "dataZakupu",
             name: "Data Zakupu",
-            minWidth: 150,
+            className: "invoiceDetailsCell",
+            minWidth: 90,
             onRender: (item: IFakturaZakupu, index) => {
                 const update = (v: Date) => {
                     item.dataZakupu = moment(v);
@@ -95,7 +104,8 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
         {
             key: "dataWplywu",
             name: "Data Wpływu",
-            minWidth: 150,
+            className : "invoiceDetailsCell",
+            minWidth: 90,
             onRender: (item: IFakturaZakupu, index) => {
                 const update = (v: Date) => {
                     item.dataWplywu = moment(v);
@@ -107,7 +117,8 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
         {
             key: "k45",
             name: "K45",
-            minWidth: 150,
+            className: "invoiceDetailsCell",
+            minWidth: 75,
             onRender: (item: IFakturaZakupu, index) => {
                 const update = (event: React.FormEvent, v: string | undefined) => {
                     const numValue = numeral(v).value();
@@ -123,7 +134,8 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
         {
             key: "vat",
             name: "VAT",
-            minWidth: 75,
+            className: "invoiceDetailsCell",
+            minWidth: 60,
             onRender: (item: IFakturaZakupu, index) => {
                 const update = (event: React.FormEvent, val: IDropdownOption) => {
                     item.vat = numeral(val.key).value();
@@ -144,7 +156,8 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
         {
             key: "k46",
             name: "K46",
-            minWidth: 150,
+            className: "invoiceDetailsCell",
+            minWidth: 75,
             onRender: (item: IFakturaZakupu, index) => {
                 const update = (event: React.FormEvent, v: string | undefined) => {
                     const numValue = numeral(v).value();
@@ -158,13 +171,25 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
         },
         {
             key: "delete",
-            name: "Usun",
+            name: "",
             minWidth: 30,
+            className: "invoiceDetailsCell",
             onRender: (item: IFakturaZakupu, index: number) => {
                 const remove = ()=>{
                     this.props.removeBuyInvoice(index);
                 }
-                return <div><Icon className="deleteIcon" iconType={IconType.default} iconName="Delete" onClick={remove} /><Icon className="deleteIcon" iconType={IconType.default} iconName="Copy" onClick={remove} /></div>
+                const copy = () => {
+                    this.props.copyBuyInvoice(index);
+                }
+                return (
+                    <div>
+                        <TooltipHost content="Usun">
+                            <Icon className="deleteIcon" iconType={IconType.default} iconName="Delete" onClick={remove} />
+                        </TooltipHost>
+                        <TooltipHost content="Kopiuj">
+                            <Icon className="deleteIcon" iconType={IconType.default} iconName="Copy" onClick={copy} />
+                        </TooltipHost>
+                    </div>)
             }
         }
     ]
