@@ -6,6 +6,7 @@ import { CurrencyField } from './CurrencyFields';
 import "./faktury.css"
 import * as numeral from "numeral"
 import * as moment from 'moment'
+import { validateRequired } from 'src/utils/utils';
 
 export interface  IFakturySprzedazyProps {
     jpk: IJPK,
@@ -23,64 +24,68 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
         {
             key: "lp",
             name: "LP",
-            minWidth: 30,
-            maxWidth: 30,
-            onRender: (item,index) => {
-                return <span>{(index|| 0)+1}</span>
+            minWidth: 15,
+            maxWidth: 15,
+            className: "invoiceDetailsCell",
+            onRender: (item, index) => {
+                return <div className="invoiceNumberSpan">{(index || 0) + 1}</div>
             }
         },
         {
             key: "nrKontrahenta",
             name: "Numer Kontrahenta",
-            minWidth: 100,
+            minWidth: 120,
+            maxWidth: 120,
             onRender: (item: IFakturaSprzedazy, index) => {
                 const update = (v:string) => {
                     item.nrKontrahenta = v;
                     this.props.updateSellInvoice(index || 0, item);
                 }
-                return <TextField value={item.nrKontrahenta} onChanged= {update}/>
+                return <TextField value={item.nrKontrahenta} onChanged={update} onGetErrorMessage={validateRequired}/>
             }
         },
         {
             key: "nazwaKontrahenta",
             name: "Nazwa Kontrahenta",
-            minWidth: 100,
+            minWidth: 170,
+            maxWidth: 170,
             onRender: (item: IFakturaSprzedazy, index) => {
                 const update = (v: string) => {
                     item.nazwaKontrahenta = v;
                     this.props.updateSellInvoice(index || 0, item);
                 }
-                return <TextField value={item.nazwaKontrahenta} onChanged={update} />
+                return <TextField value={item.nazwaKontrahenta} onChanged={update} onGetErrorMessage={validateRequired}/>
             }
         },
         {
             key: "adresKontrahenta",
             name: "Adres Kontrahenta",
-            minWidth: 100,
+            minWidth: 200,
+            maxWidth: 200,
             onRender: (item: IFakturaSprzedazy, index) => {
                 const update = (v: string) => {
                     item.adresKontrahenta = v;
                     this.props.updateSellInvoice(index || 0, item);
                 }
-                return <TextField value={item.adresKontrahenta} multiline={true} onChanged={update} />
+                return <TextField value={item.adresKontrahenta} multiline={true} rows={2} onGetErrorMessage={validateRequired} onChanged={update} />
             }
         },
         {
             key: "dowodSprzedazy",
             name: "Dowód Sprzedaży",
-            minWidth: 100,
+            minWidth: 250,
             onRender: (item: IFakturaSprzedazy, index) => {
                 const update = (v: string) => {
                     item.dowodSprzedazy = v;
                     this.props.updateSellInvoice(index || 0, item);
                 }
-                return <TextField value={item.dowodSprzedazy} onChanged={update} />
+                return <TextField value={item.dowodSprzedazy} onChanged={update} onGetErrorMessage={validateRequired} />
             }
         },
         {
             key: "dataWystawienia",
             name: "Data Wystawienia",
-            minWidth: 100,
+            minWidth: 90,
             onRender: (item: IFakturaSprzedazy, index) => {
                 const update = (v: Date) => {
                     item.dataWystawienia = moment(v);
