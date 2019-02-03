@@ -21,14 +21,12 @@ export class CurrencyField extends React.Component<ITextFieldProps, { recognized
     public render() {
         // const formattedValue = this._getFormattedValue(this.props.value)
         return (
-            <div>
-                <TextField {...this.props}
-                    onGetErrorMessage = {this._onGetErrorMessage}
-                    onBlur = {this._formatValue}
-                    // onChange = {this._mergedChange}
-                    // value = {formattedValue}
-                />
-            </div>
+            <TextField {...this.props}
+                onGetErrorMessage = {this._onGetErrorMessage}
+                onBlur = {this._formatValue}
+                // onChange = {this._mergedChange}
+                // value = {formattedValue}
+            />
         );
     }
 
@@ -36,7 +34,7 @@ export class CurrencyField extends React.Component<ITextFieldProps, { recognized
         const ret = validateRequired(val);
         if (ret) {return ret}
         else if (isNaN(numeral(val).value())) { return "Nie rozpoznano liczby"}
-        else if(numeral(val).value() <= 0) {return "Wartość dodatnia"}
+        else if(numeral(val).value() <= 0) {return "> 0"}
         else { return ""}
     }
 

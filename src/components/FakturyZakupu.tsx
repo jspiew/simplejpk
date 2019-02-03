@@ -198,9 +198,11 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
         return (
             <div>
                 <h2>Faktury zakupu</h2>
-                <DetailsList items={this.props.jpk.zakup} selectionMode={SelectionMode.none} columns = {this.columns}/>
-                <CurrencyField className="taxField" label="Podatek" value={this.props.jpk.podatekZakup.toString()} onChange={this._updateTax}/><br />
-                <ActionButton className="addInvoiceButton" iconProps={{ iconName: 'Add', iconType: IconType.default }} text="Dodaj" onClick={this.props.addBuyInvoice} /><br />
+                <DetailsList className="invoiceList" items={this.props.jpk.zakup} selectionMode={SelectionMode.none} columns = {this.columns}/>
+                <div className="invoiceFooter">
+                    <ActionButton className="addInvoiceButton" iconProps={{ iconName: 'Add', iconType: IconType.default }} text="Dodaj fakturę" onClick={this.props.addBuyInvoice} />
+                    <CurrencyField className="taxField" label="Podatek" value={this.props.jpk.podatekZakup.toString()} onChange={this._updateTax}/>
+                </div>
             </div>
             
         );

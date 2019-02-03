@@ -3,6 +3,8 @@ import './App.css';
 import { IJPK, IFakturaZakupu, IFakturaSprzedazy } from './models/jpk';
 import { FakturyZakupu } from './components/FakturyZakupu';
 import { autobind } from 'office-ui-fabric-react/lib/Utilities';
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { IconType } from 'office-ui-fabric-react/lib/Icon';
 import { FakturySprzedazy } from './components/FakturySprzedazy';
 import { initializeIcons } from '@uifabric/icons';
 import { JpkNaglowek } from './components/JpkNaglowek';
@@ -84,7 +86,7 @@ class App extends React.Component<{},{jpk:IJPK}> {
             updateBuyInvoice = {this._updateBuyInvoice}
             updateJpk = {this._updateJPK}
           />          
-
+          
           <FakturySprzedazy
             jpk={this.state.jpk}
             addSellInvoice={this._addSellInvoice}
@@ -93,7 +95,7 @@ class App extends React.Component<{},{jpk:IJPK}> {
             updateSellInvoice={this._updateSellInvoice}
             updateJpk={this._updateJPK}
           />
-        <a onClick={this._getCSV}>CSV</a>
+        <DefaultButton onClick={this._getCSV} className="generateCSVButton" text="Wygeneruj CSV" iconProps={{ iconName: 'DownloadDocument', iconType: IconType.default }}/>
         {window.location.search.indexOf("dbg") >= 0 && <code>
           <pre>
             {JSON.stringify(this.state.jpk,null,4)}
@@ -216,11 +218,17 @@ class App extends React.Component<{},{jpk:IJPK}> {
   }
 
   @autobind
-  private _updateSellInvoice(index: number, invoice: IFakturaSprzedazy) {
+  private _updateSellInvoice(index: number, invoice: IFakturaSprzedazy, recalculateTax = false) {
     const newJPK = { ...this.state.jpk };
     const newInvoices = [...newJPK.sprzedaz];
     newJPK.sprzedaz = newInvoices;
     newJPK.sprzedaz[index] = invoice;
+    if (recalculateTax) {
+      const newTax = newJPK.sprzedaz.map(f => f.k20).reduce((prev, next) => (prev || 0) + (next || 0));
+      if (newTax) {
+        newJPK.podatekSprzedaz = parseFloat(newTax.toFixed(2));
+      }
+    }
     this.setState({
       jpk: newJPK
     })

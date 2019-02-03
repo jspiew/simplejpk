@@ -25,9 +25,9 @@ export function downloadCSV(jpk: IJPK){
 
     const jpkContent = [...header,...sell,...buy]
     
-    csvContent+=getHeaderRow();
+    csvContent+=getHeaderRow()+"\n\r";
     jpkContent.forEach(row => {
-        csvContent+=csvRow(row);
+        csvContent += csvRow(row) + "\n\r";
     })
 
     const link = document.createElement('a');

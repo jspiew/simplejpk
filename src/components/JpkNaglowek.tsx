@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { TextField, DatePicker, autobind, DayOfWeek } from "office-ui-fabric-react"
-import {_formatDate} from "../utils/utils"
+import {_formatDate, validateRequired} from "../utils/utils"
 import { IJPK } from 'src/models/jpk'
 import * as moment from "moment"
 
@@ -30,13 +30,14 @@ export class JpkNaglowek extends React.Component<IJpkNaglowekProps,{}> {
                         <DatePicker label="Data do" formatDate={_formatDate} value={this.props.jpk.dataDo.toDate()} firstDayOfWeek={DayOfWeek.Monday}  isRequired={true} onSelectDate={this._updateDateTo}  placeholder="Ostatni dzien miesiaca"/>
                     </div>
                     <div className="ms-Grid-col ms-sm12 ms-md2">
-                        <TextField label="Email" onChange = {this._updateEmail} required={true} value={this.props.jpk.email}/>
+                        <TextField label="Email" onChange={this._updateEmail} required={true} onGetErrorMessage={validateRequired} value={this.props.jpk.email}/>
                     </div>
                     <div className="ms-Grid-col ms-sm12 ms-md2">
-                        <TextField label="NIP" onChange={this._updateNip} required={true} value={this.props.jpk.nip}/>
+                        <TextField label="NIP" onChange={this._updateNip}
+                            onGetErrorMessage={validateRequired} required={true} value={this.props.jpk.nip}/>
                     </div>
                     <div className="ms-Grid-col ms-sm12 ms-md2">
-                        <TextField label="Pełna nazwa" onChange={this._updateFullName} required={true} placeholder="Nazwa firmy..." value={this.props.jpk.pelnaNazwa}/>
+                        <TextField label="Pełna nazwa" onGetErrorMessage={validateRequired} onChange={this._updateFullName} required={true} placeholder="Nazwa firmy..." value={this.props.jpk.pelnaNazwa}/>
                     </div>
                 </div>
             </div>

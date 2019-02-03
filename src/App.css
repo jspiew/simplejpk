@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  
 }
 
 .App-logo {
@@ -20,6 +20,11 @@
 
 .App-intro {
   font-size: large;
+}
+
+.generateCSVButton {
+  margin: 10px;
+  float:right;
 }
 
 @keyframes App-logo-spin {

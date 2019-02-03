@@ -9,18 +9,20 @@
 }
 
 .taxField {
+    display: inline-block;
+    text-align: left;
     max-width: 200px;
-    float:right;
     margin:15px;
 }
 
 .addInvoiceButton{
-    float: right;
-    margin: 15px;
+    text-align: left;
+    display: inline-block;
+    margin: 15px 15px 15px auto;
 }
 
 .invoiceDetailsCell {
-    padding: 2px;
+    padding: 11px 2px;
 }
 
 .invoiceDetailsCell input {
@@ -29,4 +31,8 @@
 
 .invoiceNumberSpan {
     text-align: center
+}
+
+.invoiceFooter {
+    text-align: right
 }
