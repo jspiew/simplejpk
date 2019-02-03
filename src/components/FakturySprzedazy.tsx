@@ -199,8 +199,8 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
                 <h2>Faktury sprzedaży</h2>
                 <DetailsList className="invoiceList" items = {this.props.jpk.sprzedaz} selectionMode={SelectionMode.none} columns = {this.columns}/>
                 <div className="invoiceFooter">
-                    <CurrencyField className="taxField" label="Podatek"value={this.props.jpk.podatekSprzedaz.toString()} onChange={this._updateTax} />
                     <ActionButton className="addInvoiceButton" iconProps={{ iconName: 'Add', iconType: IconType.default }} text="Dodaj fakturę" onClick={this.props.addSellInvoice} />
+                    <CurrencyField className="taxField" label="Podatek" value={this.props.jpk.podatekSprzedaz.toString()} onChange={this._updateTax} />
                 </div>
             </div>
             

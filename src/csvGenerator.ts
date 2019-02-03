@@ -25,14 +25,14 @@ export function downloadCSV(jpk: IJPK){
 
     const jpkContent = [...header,...sell,...buy]
     
-    csvContent+=getHeaderRow()+"\n\r";
+    csvContent+=getHeaderRow();
     jpkContent.forEach(row => {
-        csvContent += csvRow(row) + "\n\r";
+        csvContent += csvRow(row);
     })
 
     const link = document.createElement('a');
     link.setAttribute('href', encodeURI(csvContent));
-    link.setAttribute('download',`JPK.csv`);
+    link.setAttribute('download',`JPK ${jpk.dataOd.year()}-${jpk.dataOd.month()}.csv`);
     link.click();
     
     
