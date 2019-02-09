@@ -10,9 +10,9 @@ pool:
   vmImage: 'Ubuntu-16.04'
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+- script: npm install
+  displayName: 'npm install'
 
 - script: |
     npm run build
-  displayName: 'Run a multi-line script'
+  displayName: 'build'
