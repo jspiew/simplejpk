@@ -9,10 +9,10 @@ function formatDate(moment: Moment, includeTime: boolean){
     if (moment === null || moment === undefined){
         return null;
     } else if(includeTime){
-        return moment.format("yyyy-mm-ddThh:MM:ss");
+        return moment.format("YYYY-MM-DDThh:mm:ss");
     }
     else {
-        return moment.format("yyyy-mm-dd");
+        return moment.format("YYYY-MM-DD");
     }
 }
 
