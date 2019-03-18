@@ -17,7 +17,7 @@ function formatDate(moment: Moment, includeTime: boolean){
 }
 
 export function downloadCSV(jpk: IJPK){
-    let csvContent = "data:text/csv;charset=utf-8,";
+    let csvContent = "";
     
     const header = getHeaderRows(jpk);
     const sell = getSellRows(jpk);
@@ -31,7 +31,7 @@ export function downloadCSV(jpk: IJPK){
     })
 
     const link = document.createElement('a');
-    link.setAttribute('href', encodeURI(csvContent));
+    link.setAttribute('href', "data:text/csv;charset=utf-8," + encodeURI(csvContent));
     link.setAttribute('download',`JPK ${jpk.dataOd.year()}-${jpk.dataOd.month()}.csv`);
     link.click();
     
@@ -193,9 +193,9 @@ function getHeaderRow(){
 function csvVal(val:string | null){
     let ret = "";
     if (val === undefined || val === null){
-        ret = "";
+        return ret;
     } else if((val || "").indexOf('"') >= 0){
-        ret = `"${val.replace('"',`""`)}"`
+        ret = `"${val.replace(/"/g,"\"\"")}"`
     } else {
         ret = val as string
     }
