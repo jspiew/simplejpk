@@ -91,7 +91,7 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
             key: "dataWystawienia",
             name: "Data Wystawienia",
             className: "invoiceDetailsCell",
-            minWidth: 90,
+            minWidth: 100,
             onRender: (item: IFakturaSprzedazy, index) => {
                 const update = (v: Date) => {
                     item.dataWystawienia = moment(v);
@@ -104,7 +104,7 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
             key: "dataSprzedazy",
             name: "Data Sprzedaży",
             className: "invoiceDetailsCell",
-            minWidth: 90,
+            minWidth: 100,
             onRender: (item: IFakturaSprzedazy, index) => {
                 const update = (v: Date) => {
                     item.dataSprzedazy = moment(v);
@@ -193,6 +193,11 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
         }
     ]
 
+    constructor(props: IFakturySprzedazyProps) {
+        super(props);
+        this._updateTax = this._updateTax.bind(this);
+    }
+
     public render() {
         return (
             <div>
@@ -200,12 +205,13 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
                 <DetailsList className="invoiceList" items = {this.props.jpk.sprzedaz} selectionMode={SelectionMode.none} columns = {this.columns}/>
                 <div className="invoiceFooter">
                     <ActionButton className="addInvoiceButton" iconProps={{ iconName: 'Add', iconType: IconType.default }} text="Dodaj fakturę" onClick={this.props.addSellInvoice} />
-                    <CurrencyField className="taxField" label="Podatek" value={this.props.jpk.podatekSprzedaz.toString()} onChange={this._updateTax} />
+                    <CurrencyField className="taxField" label="Podatek" value={this.props.jpk.podatekSprzedaz == null ? "" : this.props.jpk.podatekSprzedaz.toString()} onChange={this._updateTax} />
                 </div>
             </div>
             
         );
     }
+
 
     private _updateTax(event: React.FormEvent, val: string) {
         const newJPK = { ...this.props.jpk }

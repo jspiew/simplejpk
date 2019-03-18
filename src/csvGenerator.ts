@@ -23,7 +23,7 @@ export function downloadCSV(jpk: IJPK){
     const sell = getSellRows(jpk);
     const buy = getBuyRows(jpk);
 
-    const jpkContent = [...header,...sell,...buy]
+    const jpkContent = [...header, ...buy, ...sell]
     
     csvContent+=getHeaderRow();
     jpkContent.forEach(row => {
@@ -49,16 +49,16 @@ function getSellRows(jpk: IJPK){
         invRow.DowodSprzedazy = invoice.dowodSprzedazy;
         invRow.DataWystawienia = formatDate(invoice.dataWystawienia as Moment,false);
         invRow.DataSprzedazy = formatDate(invoice.dataSprzedazy as Moment, false);
-        invRow.K_19 = numeral(invoice.k19).format("0,00");
-        invRow.K_20 = numeral(invoice.k20).format("0,00");      
+        invRow.K_19 = numeral(invoice.k19).format("0.00").replace(",", ".");
+        invRow.K_20 = numeral(invoice.k20).format("0.00").replace(",", ".");      
         rows.push(invRow);
     })
     
     const sellSummaryRow = getEmptyRow();
-    sellSummaryRow.PodatekNalezny = numeral(0).format("0,00");
+    sellSummaryRow.PodatekNalezny = numeral(jpk.podatekSprzedaz).format("0.00").replace(",", ".");
     sellSummaryRow.LiczbaWierszySprzedazy = rows.length.toString();
     
-    return [...rows,sellSummaryRow];
+    return jpk.sprzedaz.length > 0  ? [...rows,sellSummaryRow] : [...rows]
 }
 
 function getBuyRows(jpk: IJPK) {
@@ -72,13 +72,13 @@ function getBuyRows(jpk: IJPK) {
         invRow.DowodZakupu = invoice.dowodZakupu;
         invRow.DataZakupu = formatDate(invoice.dataZakupu as Moment,false);
         invRow.DataWplywu = formatDate(invoice.dataWplywu as Moment,false);
-        invRow.K_45 = numeral(invoice.k45).format("0,00");
-        invRow.K_46 = numeral(invoice.k46).format("0,00");
+        invRow.K_45 = numeral(invoice.k45).format("0.00").replace(",",".");
+        invRow.K_46 = numeral(invoice.k46).format("0.00").replace(",", ".");
         rows.push(invRow);
     })
 
     const buySummaryRow = getEmptyRow();
-    buySummaryRow.PodatekNaliczony = numeral(0).format("0,00");
+    buySummaryRow.PodatekNaliczony = numeral(jpk.podatekZakup).format("0.00").replace(",", ".");
     buySummaryRow.LiczbaWierszyZakupow = rows.length.toString();
 
     return [...rows, buySummaryRow];
@@ -183,7 +183,7 @@ function getEmptyRow(){
 }
 
 function csvRow(rowData: IJpkCsvRow){
-    return `${csvVal(rowData.KodFormularza)};${csvVal(rowData.kodSystemowy)};${csvVal(rowData.wersjaSchemy)};${csvVal(rowData.WariantFormularza)};${csvVal(rowData.CelZlozenia)};${csvVal(rowData.DataWytworzeniaJPK)};${csvVal(rowData.DataOd)};${csvVal(rowData.DataDo)};${csvVal(rowData.NazwaSystemu)};${csvVal(rowData.NIP)};${csvVal(rowData.PelnaNazwa)};${csvVal(rowData.Email)};${csvVal(rowData.LpSprzedazy)};${csvVal(rowData.NrKontrahenta)};${csvVal(rowData.NazwaKontrahenta)};${csvVal(rowData.AdresKontrahenta)};${csvVal(rowData.DowodSprzedazy)};${csvVal(rowData.DataWystawienia)};${csvVal(rowData.DataSprzedazy)};${csvVal(rowData.K_10)};${csvVal(rowData.K_11)};${csvVal(rowData.K_12)};${csvVal(rowData.K_13)};${csvVal(rowData.K_14)};${csvVal(rowData.K_15)};${csvVal(rowData.K_16)};${csvVal(rowData.K_17)};${csvVal(rowData.K_18)};${csvVal(rowData.K_19)};${csvVal(rowData.K_20)};${csvVal(rowData.K_21)};${csvVal(rowData.K_22)};${csvVal(rowData.K_23)};${csvVal(rowData.K_24)};${csvVal(rowData.K_25)};${csvVal(rowData.K_26)};${csvVal(rowData.K_27)};${csvVal(rowData.K_28)};${csvVal(rowData.K_29)};${csvVal(rowData.K_30)};${csvVal(rowData.K_31)};${csvVal(rowData.K_32)};${csvVal(rowData.K_33)};${csvVal(rowData.K_34)};${csvVal(rowData.K_35)};${csvVal(rowData.K_36)};${csvVal(rowData.K_37)};${csvVal(rowData.K_38)};${csvVal(rowData.K_39)};${csvVal(rowData.LiczbaWierszySprzedazy)};${csvVal(rowData.PodatekNalezny)};${csvVal(rowData.LpZakupu)};${csvVal(rowData.NrDostawcy)};${csvVal(rowData.NazwaDostawcy)};${csvVal(rowData.AdresDostawcy)};${csvVal(rowData.DowodZakupu)};${csvVal(rowData.DataZakupu)};${csvVal(rowData.DataWplywu)};${csvVal(rowData.K_43)};${csvVal(rowData.K_44)};${csvVal(rowData.K_45)};${csvVal(rowData.K_46)};${csvVal(rowData.K_47)};${csvVal(rowData.K_48)};${csvVal(rowData.K_49)};${csvVal(rowData.K_50)};${csvVal(rowData.LiczbaWierszyZakupow)};${csvVal(rowData.PodatekNaliczony)}\n`
+    return `${csvVal(rowData.KodFormularza)};${csvVal(rowData.kodSystemowy)};${csvVal(rowData.wersjaSchemy)};${csvVal(rowData.WariantFormularza)};${csvVal(rowData.CelZlozenia)};${csvVal(rowData.DataWytworzeniaJPK)};${csvVal(rowData.DataOd)};${csvVal(rowData.DataDo)};${csvVal(rowData.NazwaSystemu)};${csvVal(rowData.NIP)};${csvVal(rowData.PelnaNazwa)};${csvVal(rowData.Email)};${csvVal(rowData.LpSprzedazy)};${csvVal(rowData.NrKontrahenta)};${csvVal(rowData.NazwaKontrahenta)};${csvVal((rowData.AdresKontrahenta || "").replace("\n", ", "))};${csvVal(rowData.DowodSprzedazy)};${csvVal(rowData.DataWystawienia)};${csvVal(rowData.DataSprzedazy)};${csvVal(rowData.K_10)};${csvVal(rowData.K_11)};${csvVal(rowData.K_12)};${csvVal(rowData.K_13)};${csvVal(rowData.K_14)};${csvVal(rowData.K_15)};${csvVal(rowData.K_16)};${csvVal(rowData.K_17)};${csvVal(rowData.K_18)};${csvVal(rowData.K_19)};${csvVal(rowData.K_20)};${csvVal(rowData.K_21)};${csvVal(rowData.K_22)};${csvVal(rowData.K_23)};${csvVal(rowData.K_24)};${csvVal(rowData.K_25)};${csvVal(rowData.K_26)};${csvVal(rowData.K_27)};${csvVal(rowData.K_28)};${csvVal(rowData.K_29)};${csvVal(rowData.K_30)};${csvVal(rowData.K_31)};${csvVal(rowData.K_32)};${csvVal(rowData.K_33)};${csvVal(rowData.K_34)};${csvVal(rowData.K_35)};${csvVal(rowData.K_36)};${csvVal(rowData.K_37)};${csvVal(rowData.K_38)};${csvVal(rowData.K_39)};${csvVal(rowData.LiczbaWierszySprzedazy)};${csvVal(rowData.PodatekNalezny)};${csvVal(rowData.LpZakupu)};${csvVal(rowData.NrDostawcy)};${csvVal(rowData.NazwaDostawcy)};${csvVal((rowData.AdresDostawcy) || "").replace("\n", ", ")};${csvVal(rowData.DowodZakupu)};${csvVal(rowData.DataZakupu)};${csvVal(rowData.DataWplywu)};${csvVal(rowData.K_43)};${csvVal(rowData.K_44)};${csvVal(rowData.K_45)};${csvVal(rowData.K_46)};${csvVal(rowData.K_47)};${csvVal(rowData.K_48)};${csvVal(rowData.K_49)};${csvVal(rowData.K_50)};${csvVal(rowData.LiczbaWierszyZakupow)};${csvVal(rowData.PodatekNaliczony)}\n`
 }
 
 function getHeaderRow(){
@@ -195,7 +195,7 @@ function csvVal(val:string | null){
     if (val === undefined || val === null){
         ret = "";
     } else if((val || "").indexOf('"') >= 0){
-        ret = `"${val}"`
+        ret = `"${val.replace('"',`""`)}"`
     } else {
         ret = val as string
     }

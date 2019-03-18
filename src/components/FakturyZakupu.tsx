@@ -92,7 +92,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
             key: "dataZakupu",
             name: "Data Zakupu",
             className: "invoiceDetailsCell",
-            minWidth: 90,
+            minWidth: 100,
             onRender: (item: IFakturaZakupu, index) => {
                 const update = (v: Date) => {
                     item.dataZakupu = moment(v);
@@ -105,7 +105,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
             key: "dataWplywu",
             name: "Data Wpływu",
             className : "invoiceDetailsCell",
-            minWidth: 90,
+            minWidth: 100,
             onRender: (item: IFakturaZakupu, index) => {
                 const update = (v: Date) => {
                     item.dataWplywu = moment(v);
@@ -194,6 +194,11 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
         }
     ]
 
+    constructor(props: IFakturyZakupuProps){
+        super(props);
+        this._updateTax = this._updateTax.bind(this);
+    }
+
     public render() {
         return (
             <div>
@@ -201,7 +206,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
                 <DetailsList className="invoiceList" items={this.props.jpk.zakup} selectionMode={SelectionMode.none} columns = {this.columns}/>
                 <div className="invoiceFooter">
                     <ActionButton className="addInvoiceButton" iconProps={{ iconName: 'Add', iconType: IconType.default }} text="Dodaj fakturę" onClick={this.props.addBuyInvoice} />
-                    <CurrencyField className="taxField" label="Podatek" value={this.props.jpk.podatekZakup.toString()} onChange={this._updateTax}/>
+                    <CurrencyField className="taxField" label="Podatek" value={this.props.jpk.podatekZakup == null ? "" : this.props.jpk.podatekZakup.toString()} onChanged={this._updateTax}/>
                 </div>
             </div>
             
@@ -212,7 +217,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
         return df(date,DATEFORMAT)
     }
 
-    private _updateTax(event: React.FormEvent, val: string){
+    private _updateTax(val: string){
         const newJPK = {...this.props.jpk}
         newJPK.podatekZakup = numeral(val).value();
         this.props.updateJpk(newJPK);
