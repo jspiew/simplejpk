@@ -19,7 +19,7 @@ class App extends React.Component<{},{jpk:IJPK}> {
 
       initializeIcons();
 
-      const lastJPKstring = window.localStorage.getItem("lastJPK")
+      const lastJPKstring = window.localStorage.getItem("lastJPK2")
 
       if(lastJPKstring && window.location.search.indexOf("dbg") < 0){
         const loadedJPK = JSON.parse(lastJPKstring) as IJPK;
@@ -67,7 +67,7 @@ class App extends React.Component<{},{jpk:IJPK}> {
     }
 
   public componentDidUpdate(){
-    window.localStorage.setItem("lastJPK",JSON.stringify(this.state.jpk));
+    window.localStorage.setItem("lastJPK2",JSON.stringify(this.state.jpk));
   }
 
   public render() {
