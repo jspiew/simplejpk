@@ -121,7 +121,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
             minWidth: 75,
             onRender: (item: IFakturaZakupu, index) => {
                 const update = (event: React.FormEvent, v: string | undefined) => {
-                    const numValue = numeral(v || 0).value();
+                    const numValue = numeral(v === undefined ? undefined : v.replace(',','.') || 0).value();
                     if (!isNaN(numValue) && item.k45 !== numValue){
                         item.k45 = numValue;
                         item.k46 = parseFloat((item.k45 * (item.vat / 100)).toFixed(2));
