@@ -32,7 +32,7 @@ export function downloadCSV(jpk: IJPK){
 
     const link = document.createElement('a');
     link.setAttribute('href', "data:text/csv;charset=utf-8," + encodeURI(csvContent));
-    link.setAttribute('download',`JPK ${jpk.dataOd.year()}-${jpk.dataOd.month()}.csv`);
+    link.setAttribute('download',`JPKVAT ${jpk.dataOd.format("mm.yyyy")}.csv`);
     link.click();
     
     

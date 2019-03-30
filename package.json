@@ -3,18 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@types/dateformat": "^1.0.1",
+    "@types/dateformat": "^1.0.2",
     "@types/moment": "^2.13.0",
     "@types/numeral": "0.0.25",
     "dateformat": "^3.0.3",
-    "json-csv": "^2.0.2",
-    "mobx": "^5.8.0",
+    "json-csv": "^2.0.3",
+    "mobx": "^5.9.4",
     "mobx-react": "^5.4.3",
-    "moment": "^2.23.0",
+    "moment": "^2.24.0",
     "numeral": "^2.0.6",
-    "office-ui-fabric-react": "5.120.0",
-    "react": "^16.7.0",
-    "react-dom": "^16.7.0",
+    "office-ui-fabric-react": "6.83.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
     "react-scripts-ts": "3.1.0"
   },
   "scripts": {
@@ -24,10 +24,10 @@
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
-    "@types/jest": "^23.3.10",
-    "@types/node": "^10.12.18",
-    "@types/react": "^16.7.18",
-    "@types/react-dom": "^16.0.11",
-    "typescript": "^3.2.2"
+    "@types/jest": "^23.3.14",
+    "@types/node": "^10.14.4",
+    "@types/react": "^16.8.10",
+    "@types/react-dom": "^16.8.3",
+    "typescript": "^3.4.1"
   }
 }
