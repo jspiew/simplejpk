@@ -91,7 +91,7 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
             key: "dataWystawienia",
             name: "Data Wystawienia",
             className: "invoiceDetailsCell",
-            minWidth: 100,
+            minWidth: 120,
             onRender: (item: IFakturaSprzedazy, index) => {
                 const update = (v: Date) => {
                     item.dataWystawienia = moment(v);
@@ -104,7 +104,7 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
             key: "dataSprzedazy",
             name: "Data Sprzedaży",
             className: "invoiceDetailsCell",
-            minWidth: 100,
+            minWidth: 120,
             onRender: (item: IFakturaSprzedazy, index) => {
                 const update = (v: Date) => {
                     item.dataSprzedazy = moment(v);
@@ -120,7 +120,7 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
             minWidth: 75,
             onRender: (item: IFakturaSprzedazy, index) => {
                 const update = (event: React.FormEvent, v: string | undefined) => {
-                    const numValue = numeral(v || 0).value();
+                    const numValue = numeral(v === undefined ? undefined : v.replace(',', '.') || 0).value();
                     if (!isNaN(numValue) && item.k19 !== numValue) {
                         item.k19 = numValue;
                         item.k20 = parseFloat((item.k19 * (item.vat / 100)).toFixed(2));
@@ -134,7 +134,7 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
             key: "vat",
             name: "VAT",
             className: "invoiceDetailsCell",
-            minWidth: 60,
+            minWidth: 80,
             onRender: (item: IFakturaSprzedazy, index) => {
                 const update = (event: React.FormEvent, val: IDropdownOption) => {
                     item.vat = numeral(val.key).value();
@@ -159,7 +159,7 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
             minWidth: 75,
             onRender: (item: IFakturaSprzedazy,index) => {
                 const update = (event: React.FormEvent, v: string | undefined) => {
-                    const numValue = numeral(v).value();
+                    const numValue = numeral(v === undefined ? undefined : v.replace(',', '.') || 0).value();
                     if (!isNaN(numValue) && item.k20 !== numValue) {
                         item.k20 = numValue;
                         this.props.updateSellInvoice(index || 0, item);
@@ -214,8 +214,9 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
 
 
     private _updateTax(event: React.FormEvent, val: string) {
+        const numValue = numeral(val === undefined ? undefined : val.replace(',', '.') || 0).value();
         const newJPK = { ...this.props.jpk }
-        newJPK.podatekSprzedaz = numeral(val).value();
+        newJPK.podatekSprzedaz = numValue;
         this.props.updateJpk(newJPK);
     }
 

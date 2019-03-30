@@ -92,7 +92,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
             key: "dataZakupu",
             name: "Data Zakupu",
             className: "invoiceDetailsCell",
-            minWidth: 100,
+            minWidth: 120,
             onRender: (item: IFakturaZakupu, index) => {
                 const update = (v: Date) => {
                     item.dataZakupu = moment(v);
@@ -105,7 +105,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
             key: "dataWplywu",
             name: "Data Wpływu",
             className : "invoiceDetailsCell",
-            minWidth: 100,
+            minWidth: 120,
             onRender: (item: IFakturaZakupu, index) => {
                 const update = (v: Date) => {
                     item.dataWplywu = moment(v);
@@ -135,7 +135,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
             key: "vat",
             name: "VAT",
             className: "invoiceDetailsCell",
-            minWidth: 60,
+            minWidth: 80,
             onRender: (item: IFakturaZakupu, index) => {
                 const update = (event: React.FormEvent, val: IDropdownOption) => {
                     item.vat = numeral(val.key).value();
@@ -160,7 +160,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
             minWidth: 75,
             onRender: (item: IFakturaZakupu, index) => {
                 const update = (event: React.FormEvent, v: string | undefined) => {
-                    const numValue = numeral(v || 0).value();
+                    const numValue = numeral(v === undefined ? undefined : v.replace(',', '.') || 0).value();
                     if (!isNaN(numValue) && item.k46 !== numValue) {
                         item.k46 = numValue;
                         this.props.updateBuyInvoice(index || 0, item, true);
@@ -218,8 +218,9 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
     }
 
     private _updateTax(val: string){
+        const numValue = numeral(val === undefined ? undefined : val.replace(',', '.') || 0).value();
         const newJPK = {...this.props.jpk}
-        newJPK.podatekZakup = numeral(val).value();
+        newJPK.podatekZakup = numValue;
         this.props.updateJpk(newJPK);
     }
     
