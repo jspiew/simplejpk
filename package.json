@@ -12,7 +12,7 @@
     "mobx-react": "^5.4.3",
     "moment": "^2.23.0",
     "numeral": "^2.0.6",
-    "office-ui-fabric-react": "^5.0.0",
+    "office-ui-fabric-react": "5.120.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-scripts-ts": "3.1.0"
