@@ -1,10 +1,7 @@
 import * as React from 'react';
-import { TextField, DatePicker, autobind, DayOfWeek } from "office-ui-fabric-react"
+import { TextField, autobind } from "office-ui-fabric-react"
 import {_formatDate, validateRequired} from "../utils/utils"
 import { IJPK } from 'src/models/jpk'
-import * as moment from "moment"
-
-
 
 export interface IJpkNaglowekProps {
     jpk: IJPK
@@ -23,13 +20,6 @@ export class JpkNaglowek extends React.Component<IJpkNaglowekProps,{}> {
             <div className="ms-Grid">
                 <div className="ms-Grid-row">
                     <div className="ms-Grid-col ms-sm12 ms-md2">
-                        <DatePicker label="Data od" formatDate={_formatDate}  firstDayOfWeek={DayOfWeek.Monday} isRequired={true} value={this.props.jpk.dataOd.toDate()} onSelectDate={this._updateDateFrom}  
-                          placeholder="Pierwszy dzien miesiaca" />
-                    </div>
-                    <div className="ms-Grid-col ms-sm12 ms-md2">
-                        <DatePicker label="Data do" formatDate={_formatDate} value={this.props.jpk.dataDo.toDate()} firstDayOfWeek={DayOfWeek.Monday}  isRequired={true} onSelectDate={this._updateDateTo}  placeholder="Ostatni dzien miesiaca"/>
-                    </div>
-                    <div className="ms-Grid-col ms-sm12 ms-md2">
                         <TextField label="Email" onChange={this._updateEmail} required={true} onGetErrorMessage={validateRequired} value={this.props.jpk.email}/>
                     </div>
                     <div className="ms-Grid-col ms-sm12 ms-md2">
@@ -44,19 +34,6 @@ export class JpkNaglowek extends React.Component<IJpkNaglowekProps,{}> {
         );
     }
 
-    @autobind
-    private _updateDateFrom(date: Date | null | undefined){
-        const newJPK = {...this.props.jpk};
-        newJPK.dataOd = date === null ? moment() : moment(date);
-        this.props.updateJpk(newJPK);
-    }
-
-    @autobind
-    private _updateDateTo(date: Date | null | undefined) {
-        const newJPK = { ...this.props.jpk };
-        newJPK.dataDo = date === null ? moment() : moment(date);
-        this.props.updateJpk(newJPK);
-    }
 
     @autobind
     private _updateEmail(event: React.FormEvent, email:string) {

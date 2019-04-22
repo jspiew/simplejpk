@@ -1,6 +1,12 @@
 import { Moment } from 'moment';
 
 
+export interface IJpkProfile {
+    nip: string,
+    email: string
+    nazwa: string
+}
+
 export interface IJPK {
     dataWytworzeniaJPK: Moment,
     dataOd: Moment,

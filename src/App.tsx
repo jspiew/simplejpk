@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './App.css';
-import { IJPK, IFakturaZakupu, IFakturaSprzedazy } from './models/jpk';
+import { IJPK, IFakturaZakupu, IFakturaSprzedazy, IJpkProfile } from './models/jpk';
 import { FakturyZakupu } from './components/FakturyZakupu';
 import { autobind } from 'office-ui-fabric-react/lib/Utilities';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
@@ -12,62 +12,30 @@ import { downloadCSV } from './csvGenerator';
 import * as moment from "moment"
 
 
-class App extends React.Component<{},{jpk:IJPK}> {
+class App extends React.Component<{},{jpk:IJPK, selectedDate: moment.Moment}> {
 
   constructor(props: {}) {
       super(props);
 
       initializeIcons();
 
-      const lastJPKstring = window.localStorage.getItem("lastJPK2")
-
-      if(lastJPKstring && window.location.search.indexOf("dbg") < 0){
-        const loadedJPK = JSON.parse(lastJPKstring) as IJPK;
-        loadedJPK.dataDo = moment(loadedJPK.dataDo);
-        loadedJPK.dataOd = moment(loadedJPK.dataOd);
-        loadedJPK.dataWytworzeniaJPK = moment(loadedJPK.dataWytworzeniaJPK);
-        loadedJPK.zakup.forEach(z =>{
-          z.dataWplywu = moment(z.dataWplywu);
-          z.dataZakupu = moment(z.dataZakupu);
-        })
-        loadedJPK.sprzedaz.forEach(s => {
-          s.dataSprzedazy = moment(s.dataSprzedazy);
-          s.dataWystawienia = moment(s.dataWystawienia);
-        })
-        this.state = {
-          jpk: loadedJPK
-        }
-      } else {
-        this.state = {
-          jpk: {
-            dataDo: moment().endOf("month"),
-            dataOd: moment().startOf("month"),
-            dataWytworzeniaJPK: moment(),
-            email: "",
-            nip: "",
-            pelnaNazwa: "",
-            podatekSprzedaz: 0,
-            podatekZakup: 0,
-            sprzedaz: [],
-            zakup: [{
-              adresDostawcy: "",
-              dataWplywu: undefined,
-              dataZakupu: undefined,
-              dowodZakupu: "",
-              k45: undefined,
-              vat: 23,
-              k46: undefined,
-              nazwaDostawcy: "",
-              nrDostawcy: ""
-            }]
-
-          }
-        }
-      }
+    const selectedDate = moment();
+    const jpk = this.extractJPK(selectedDate);
+    this.state = {
+      selectedDate,
+      jpk
     }
+  }
+
+  
 
   public componentDidUpdate(){
-    window.localStorage.setItem("lastJPK2",JSON.stringify(this.state.jpk));
+    window.localStorage.setItem("JPK_" + this.state.selectedDate.format("YYYYMM"),JSON.stringify(this.state.jpk));
+    window.localStorage.setItem("JPK_profileconsts",JSON.stringify({
+      nip: this.state.jpk.nip,
+      email: this.state.jpk.email,
+      nazwa: this.state.jpk.pelnaNazwa
+    } as IJpkProfile));
   }
 
   public render() {
@@ -75,6 +43,10 @@ class App extends React.Component<{},{jpk:IJPK}> {
       <div className="App">
         <header className="App-header">
           <h1 className="App-title">Troche prostsze JPK</h1>
+          <h2>
+            <DefaultButton className="monthButton" text="Poprzedni miesiąc" onClick={this._decrementMonth} />{this.state.selectedDate.format("MM.YYYY")}
+            <DefaultButton className="monthButton" text="Następny miesiąc" onClick={this._incrementMonth} />
+          </h2>
           <link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/9.6.1/css/fabric.min.css"/>
         </header>
         <div className="App-main">
@@ -108,6 +80,25 @@ class App extends React.Component<{},{jpk:IJPK}> {
     );
   }
 
+  @autobind 
+  private _incrementMonth(){
+    const newDate = moment(this.state.selectedDate).add(1, "month");
+    const jpk = this.extractJPK(newDate);
+    this.setState({
+      selectedDate: newDate,
+      jpk
+    })
+  }
+
+  @autobind 
+  private _decrementMonth() {
+    const newDate = moment(this.state.selectedDate).add(-1, "month");
+    const jpk = this.extractJPK(newDate);
+    this.setState({
+      selectedDate: newDate,
+      jpk
+    })
+  }
 
   @autobind 
   private _getCSV(){
@@ -241,6 +232,56 @@ class App extends React.Component<{},{jpk:IJPK}> {
     this.setState({
       jpk
     })
+  }
+
+  @autobind
+  private extractJPK(selectedDate: moment.Moment) {
+    const lastJPKstring = window.localStorage.getItem("JPK_" + selectedDate.format("YYYYMM"))
+    if (lastJPKstring && window.location.search.indexOf("dbg") < 0) {
+      const loadedJPK = JSON.parse(lastJPKstring) as IJPK;
+      loadedJPK.dataDo = moment(loadedJPK.dataDo);
+      loadedJPK.dataOd = moment(loadedJPK.dataOd);
+      loadedJPK.dataWytworzeniaJPK = moment(loadedJPK.dataWytworzeniaJPK);
+      loadedJPK.zakup.forEach(z => {
+        z.dataWplywu = moment(z.dataWplywu);
+        z.dataZakupu = moment(z.dataZakupu);
+      });
+      loadedJPK.sprzedaz.forEach(s => {
+        s.dataSprzedazy = moment(s.dataSprzedazy);
+        s.dataWystawienia = moment(s.dataWystawienia);
+      });
+
+      return loadedJPK;
+    }
+    else {
+      const emptyJpk =  this.emptyJpk(selectedDate);
+      const profileString = window.localStorage.getItem("JPK_profileconsts");
+      if (profileString){
+        const profile = JSON.parse(profileString) as IJpkProfile;
+        emptyJpk.email = profile.email;
+        emptyJpk.nip = profile.nip;
+        emptyJpk.pelnaNazwa  = profile.nazwa;
+      }
+
+      return emptyJpk;
+    }
+  }
+
+  private emptyJpk(date: moment.Moment): IJPK {
+    const ret = {
+      dataDo: moment(date).endOf("month"),
+      dataOd: moment(date).startOf("month"),
+      dataWytworzeniaJPK: moment(),
+      email: "",
+      nip: "",
+      pelnaNazwa: "",
+      podatekSprzedaz: 0,
+      podatekZakup: 0,
+      sprzedaz: [],
+      zakup: []
+    };
+
+    return ret;
   }
 }
 
