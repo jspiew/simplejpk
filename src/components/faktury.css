@@ -36,3 +36,7 @@
 .invoiceFooter {
     text-align: right
 }
+
+.dateInvalid {
+    border: 1px solid rgb(168,0,0);
+}

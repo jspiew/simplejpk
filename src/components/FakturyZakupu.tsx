@@ -44,7 +44,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
                     item.nrDostawcy = v;
                     this.props.updateBuyInvoice(index || 0, item);
                 }
-                return <TextField value={item.nrDostawcy} onGetErrorMessage={validateRequired} onChanged= {update}/>
+                return <TextField tabIndex={(index||0)+1} value={item.nrDostawcy} onGetErrorMessage={validateRequired} onChanged= {update}/>
             }
         },
         {
@@ -58,7 +58,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
                     item.nazwaDostawcy = v;
                     this.props.updateBuyInvoice(index || 0, item);
                 }
-                return <TextField value={item.nazwaDostawcy} onChanged={update} onGetErrorMessage={validateRequired} />
+                return <TextField tabIndex={(index || 0) + 2} value={item.nazwaDostawcy} onChanged={update} onGetErrorMessage={validateRequired} />
             }
         },
         {
@@ -72,7 +72,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
                     item.adresDostawcy = v;
                     this.props.updateBuyInvoice(index || 0, item);
                 }
-                return <TextField value={item.adresDostawcy} multiline={true} rows={2} onChanged={update} onGetErrorMessage={validateRequired} />
+                return <TextField tabIndex={(index || 0) + 3} value={item.adresDostawcy} multiline={true} rows={2} onChanged={update} onGetErrorMessage={validateRequired} />
             }
         },
         {
@@ -85,7 +85,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
                     item.dowodZakupu = v;
                     this.props.updateBuyInvoice(index || 0, item);
                 }
-                return <TextField value={item.dowodZakupu} onChanged={update} onGetErrorMessage={validateRequired} />
+                return <TextField tabIndex={(index || 0) + 4} value={item.dowodZakupu} onChanged={update} onGetErrorMessage={validateRequired} />
             }
         },
         {
@@ -98,7 +98,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
                     item.dataZakupu = moment(v);
                     this.props.updateBuyInvoice(index || 0, item);
                 }
-                return <DatePicker value={item.dataZakupu === undefined ? undefined : item.dataZakupu.toDate()} formatDate={this._formatDate} onSelectDate={update}  />
+                return <DatePicker className={item.dataZakupu === undefined ? "dateInvalid" : undefined} tabIndex={(index || 0) + 5} value={item.dataZakupu === undefined ? undefined : item.dataZakupu.toDate()} formatDate={this._formatDate} onSelectDate={update}  />
             }
         },
         {
@@ -111,7 +111,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
                     item.dataWplywu = moment(v);
                     this.props.updateBuyInvoice(index || 0, item);
                 }
-                return <DatePicker value={item.dataWplywu === undefined ? undefined : item.dataWplywu.toDate()} formatDate={this._formatDate} onSelectDate={update} />
+                return <DatePicker className={item.dataWplywu === undefined ? "dateInvalid" : undefined}  tabIndex={(index || 0) + 6} value={item.dataWplywu === undefined ? undefined : item.dataWplywu.toDate()} formatDate={this._formatDate} onSelectDate={update} />
             }
         },
         {
@@ -128,7 +128,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
                         this.props.updateBuyInvoice(index || 0, item, true);
                     }
                 }
-                return <CurrencyField value={item.k45 === undefined ? undefined : item.k45.toString()} onChange={update} />
+                return <CurrencyField tabIndex={(index || 0) + 7} value={item.k45 === undefined ? undefined : item.k45.toString()} onChange={update} />
             }
         },
         {
@@ -145,7 +145,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
                     this.props.updateBuyInvoice(index || 0, item, true);
                     return item.vat.toString()
                 }
-                return <Dropdown defaultSelectedKey = {item.vat} options = {VATRATES.map<IDropdownOption>(r => {
+                return <Dropdown tabIndex={(index || 0) + 8} defaultSelectedKey = {item.vat} options = {VATRATES.map<IDropdownOption>(r => {
                     return {
                         key: r,
                         text: `${r}%`
@@ -166,7 +166,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
                         this.props.updateBuyInvoice(index || 0, item, true);
                     }
                 }
-                return <CurrencyField value={item.k46 === undefined ? undefined : item.k46.toString()} onChange={update} />
+                return <CurrencyField tabIndex={(index || 0) + 9} value={item.k46 === undefined ? undefined : item.k46.toString()} onChange={update} />
             }
         },
         {

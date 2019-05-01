@@ -97,7 +97,7 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
                     item.dataWystawienia = moment(v);
                     this.props.updateSellInvoice(index || 0, item);
                 }
-                return <DatePicker value={item.dataWystawienia === undefined ? undefined : item.dataWystawienia.toDate()} onSelectDate={update} formatDate={this._formatDate}/>
+                return <DatePicker className={item.dataWystawienia === undefined ? "dateInvalid" : undefined}   value={item.dataWystawienia === undefined ? undefined : item.dataWystawienia.toDate()} onSelectDate={update} formatDate={this._formatDate}/>
             }
         },
         {
@@ -110,7 +110,7 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
                     item.dataSprzedazy = moment(v);
                     this.props.updateSellInvoice(index || 0, item);
                 }
-                return <DatePicker value={item.dataSprzedazy === undefined ? undefined : item.dataSprzedazy.toDate()} onSelectDate={update} formatDate={this._formatDate}/>
+                return <DatePicker className={item.dataSprzedazy === undefined ? "dateInvalid" : undefined}  value={item.dataSprzedazy === undefined ? undefined : item.dataSprzedazy.toDate()} onSelectDate={update} formatDate={this._formatDate}/>
             }
         },
         {

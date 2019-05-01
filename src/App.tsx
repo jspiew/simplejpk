@@ -111,8 +111,8 @@ class App extends React.Component<{},{jpk:IJPK, selectedDate: moment.Moment}> {
     const newInvoices = [...newJPK.zakup];
     newInvoices.push({
       adresDostawcy: "",
-      dataWplywu: moment(),
-      dataZakupu: moment(),
+      dataWplywu: undefined,
+      dataZakupu: undefined,
       dowodZakupu: "",
       k45: 0,
       vat: 23,
@@ -172,8 +172,8 @@ class App extends React.Component<{},{jpk:IJPK, selectedDate: moment.Moment}> {
     const newInvoices = [...newJPK.sprzedaz];
     newInvoices.push({
       adresKontrahenta: "",
-      dataSprzedazy: moment(),
-      dataWystawienia: moment(),
+      dataSprzedazy: undefined,
+      dataWystawienia: undefined,
       dowodSprzedazy: "",
       k19: 0,
       vat: 23,
