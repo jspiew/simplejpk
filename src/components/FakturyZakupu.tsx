@@ -43,8 +43,12 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
             minWidth: 120,
             maxWidth: 120,
             onRender: (item:IFakturaZakupu, index) => {
-                const update = (v:IComboBoxOption) => {
-                    item.nrDostawcy = (v.data as IVendor).vendorNumber;
+                const update = (v:IComboBoxOption,i: number, value: string|undefined) => {
+                    if (v){
+                        item.nrDostawcy = (v.data as IVendor).vendorNumber;
+                    } else if (value) {
+                        item.nrDostawcy = value;
+                    }
                     this.props.updateBuyInvoice(index || 0, item);
                 }
                 return <ComboBox
