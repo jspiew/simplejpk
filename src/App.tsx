@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './App.css';
-import { IJPK, IFakturaZakupu, IFakturaSprzedazy, IJpkProfile } from './models/jpk';
+import { IJPK, IFakturaZakupu, IFakturaSprzedazy, IJpkProfile, IVendor } from './models/jpk';
 import { FakturyZakupu } from './components/FakturyZakupu';
 import { autobind } from 'office-ui-fabric-react/lib/Utilities';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
@@ -10,9 +10,10 @@ import { initializeIcons } from '@uifabric/icons';
 import { JpkNaglowek } from './components/JpkNaglowek';
 import { downloadCSV } from './csvGenerator';
 import * as moment from "moment"
+import {uniqBy} from "lodash";
 
 
-class App extends React.Component<{},{jpk:IJPK, selectedDate: moment.Moment}> {
+class App extends React.Component<{},{jpk:IJPK, selectedDate: moment.Moment, availableVendors: IVendor[]}> {
 
   constructor(props: {}) {
       super(props);
@@ -21,13 +22,17 @@ class App extends React.Component<{},{jpk:IJPK, selectedDate: moment.Moment}> {
 
     const selectedDate = moment();
     const jpk = this.extractJPK(selectedDate);
+    const availableVendors = this.getAvailableVendors();
     this.state = {
       selectedDate,
-      jpk
+      jpk,
+      availableVendors
     }
   }
 
   
+
+ 
 
   public componentDidUpdate(){
     window.localStorage.setItem("JPK_" + this.state.selectedDate.format("YYYYMM"),JSON.stringify(this.state.jpk));
@@ -282,6 +287,65 @@ class App extends React.Component<{},{jpk:IJPK, selectedDate: moment.Moment}> {
     };
 
     return ret;
+  }
+
+  private getAvailableVendors() {
+    const allJPKS = this.getAllSavedJPKs();
+    let vendors: IVendor[] = [];
+    allJPKS.forEach(j => {
+      vendors = [...vendors, ...j.zakup.map<IVendor>(f => {
+        return {
+          vendorAddress: f.adresDostawcy,
+          vendorName: f.nazwaDostawcy,
+          vendorNumber: f.nrDostawcy
+        };
+      })];
+      vendors = [...vendors, ...j.sprzedaz.map<IVendor>(f => {
+        return {
+          vendorAddress: f.adresKontrahenta,
+          vendorName: f.nazwaKontrahenta,
+          vendorNumber: f.nrKontrahenta
+        };
+      })];
+    });
+    const uniqVendors = uniqBy(vendors, v => v.vendorNumber);
+    return uniqVendors;
+  }
+
+  private getAllSavedJPKs() {
+    const currentDate = moment();
+    const jpks: IJPK[] = [];
+
+    let thisJPKString = window.localStorage.getItem("JPK_" + currentDate.format("YYYYMM"));
+    while (thisJPKString){
+      const loadedJPK = this.parseLoadedJPK(thisJPKString);
+      jpks.push(loadedJPK);
+      thisJPKString = window.localStorage.getItem("JPK_" + currentDate.add(1,"months").format("YYYYMM"))
+    }
+    
+    thisJPKString = window.localStorage.getItem("JPK_" + currentDate.add(-1,"months").format("YYYYMM"));
+    while (thisJPKString) {
+      const loadedJPK = this.parseLoadedJPK(thisJPKString);
+      jpks.push(loadedJPK);
+      thisJPKString = window.localStorage.getItem("JPK_" + currentDate.add(-1, "months").format("YYYYMM"))
+    }
+    return jpks;
+  }
+
+  private parseLoadedJPK(thisJPKString: string) {
+    const loadedJPK = JSON.parse(thisJPKString) as IJPK;
+    loadedJPK.dataDo = moment(loadedJPK.dataDo);
+    loadedJPK.dataOd = moment(loadedJPK.dataOd);
+    loadedJPK.dataWytworzeniaJPK = moment(loadedJPK.dataWytworzeniaJPK);
+    loadedJPK.zakup.forEach(z => {
+      z.dataWplywu = moment(z.dataWplywu);
+      z.dataZakupu = moment(z.dataZakupu);
+    });
+    loadedJPK.sprzedaz.forEach(s => {
+      s.dataSprzedazy = moment(s.dataSprzedazy);
+      s.dataWystawienia = moment(s.dataWystawienia);
+    });
+    return loadedJPK;
   }
 }
 

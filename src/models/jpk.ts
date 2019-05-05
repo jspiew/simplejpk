@@ -43,3 +43,9 @@ export interface IFakturaZakupu {
     k45: number | undefined,
     k46: number | undefined
 }
+
+export interface IVendor {
+    vendorNumber: string,
+    vendorName: string,
+    vendorAddress: string
+}
