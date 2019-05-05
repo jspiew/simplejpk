@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IFakturaZakupu, IJPK } from  "../models/jpk"
-import { ActionButton, DetailsList, IColumn, TextField, DatePicker, IconType, Icon, SelectionMode, Dropdown, IDropdownOption, TooltipHost } from "office-ui-fabric-react"
+import { ActionButton, DetailsList, IColumn, TextField, ComboBox, DatePicker, IconType, Icon, SelectionMode, Dropdown, IDropdownOption, TooltipHost, IComboBoxOption } from "office-ui-fabric-react"
 import {observer} from "mobx-react"
 import {DATEFORMAT, VATRATES, validateRequired} from "../utils/utils"
 import * as numeral from "numeral"
@@ -40,11 +40,16 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
             minWidth: 120,
             maxWidth: 120,
             onRender: (item:IFakturaZakupu, index) => {
-                const update = (v:string) => {
-                    item.nrDostawcy = v;
+                const update = (v:IComboBoxOption) => {
+                    item.nrDostawcy = v.data.a;
                     this.props.updateBuyInvoice(index || 0, item);
                 }
-                return <TextField tabIndex={(index||0)+1} value={item.nrDostawcy} onGetErrorMessage={validateRequired} onChanged= {update}/>
+                return <ComboBox
+                    options = {[{key:"1",text:"453",data: {a:"a"}}]}
+                    text={item.nrDostawcy}
+                    onChanged = {update}
+                />
+                // return <TextField tabIndex={(index||0)+1} value={item.nrDostawcy} onGetErrorMessage={validateRequired} onChanged= {update}/>
             }
         },
         {
