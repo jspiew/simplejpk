@@ -57,6 +57,7 @@ class App extends React.Component<{},{jpk:IJPK, selectedDate: moment.Moment, ava
         <div className="App-main">
           <JpkNaglowek jpk={this.state.jpk} updateJpk={this._updateJPK}/>
           <FakturyZakupu 
+            availableVendors = {this.state.availableVendors}
             jpk = {this.state.jpk}
             addBuyInvoice={this._addBuyInvoice}
             copyBuyInvoice = {this._copyBuyInvoice}
@@ -66,6 +67,7 @@ class App extends React.Component<{},{jpk:IJPK, selectedDate: moment.Moment, ava
           />          
           
           <FakturySprzedazy
+            availableVendors={this.state.availableVendors}
             jpk={this.state.jpk}
             addSellInvoice={this._addSellInvoice}
             copySellInvoice = {this._copySellInvoice}

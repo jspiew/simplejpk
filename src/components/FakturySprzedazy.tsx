@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IFakturaSprzedazy, IJPK } from  "../models/jpk"
+import { IFakturaSprzedazy, IJPK, IVendor } from  "../models/jpk"
 import { Icon, ActionButton, DetailsList, IColumn, TextField, DatePicker, IconType, SelectionMode, IDropdownOption, Dropdown, TooltipHost } from "office-ui-fabric-react"
 import {observer} from "mobx-react"
 import { CurrencyField } from './CurrencyFields';
@@ -10,6 +10,7 @@ import { validateRequired, VATRATES, DATEFORMAT } from 'src/utils/utils';
 import * as df from 'dateformat'
 
 export interface  IFakturySprzedazyProps {
+    availableVendors: IVendor[],
     jpk: IJPK,
     updateJpk: (jpk: IJPK) => void,
     addSellInvoice: () => void,

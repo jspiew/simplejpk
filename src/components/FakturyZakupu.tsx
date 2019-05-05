@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { IFakturaZakupu, IJPK } from  "../models/jpk"
-import { ActionButton, DetailsList, IColumn, TextField, ComboBox, DatePicker, IconType, Icon, SelectionMode, Dropdown, IDropdownOption, TooltipHost, IComboBoxOption } from "office-ui-fabric-react"
+import { IFakturaZakupu, IJPK, IVendor } from  "../models/jpk"
+import { ActionButton, DetailsList, IColumn, TextField, ComboBox, DatePicker, IconType, Icon, SelectionMode, Dropdown, IDropdownOption, TooltipHost, IComboBoxOption, autobind } from "office-ui-fabric-react"
 import {observer} from "mobx-react"
 import {DATEFORMAT, VATRATES, validateRequired} from "../utils/utils"
 import * as numeral from "numeral"
@@ -10,6 +10,7 @@ import "./faktury.css"
 import * as moment from "moment"
 
 export interface  IFakturyZakupuProps {
+    availableVendors: IVendor[],
     jpk: IJPK,
     updateJpk: (jpk:IJPK) => void,
     addBuyInvoice: () => void,
@@ -20,6 +21,8 @@ export interface  IFakturyZakupuProps {
 
 @observer
 export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
+
+
 
     // private k45timeout = -1;
     private columns: IColumn[] = [
@@ -41,11 +44,11 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
             maxWidth: 120,
             onRender: (item:IFakturaZakupu, index) => {
                 const update = (v:IComboBoxOption) => {
-                    item.nrDostawcy = v.data.a;
+                    item.nrDostawcy = (v.data as IVendor).vendorNumber;
                     this.props.updateBuyInvoice(index || 0, item);
                 }
                 return <ComboBox
-                    options = {[{key:"1",text:"453",data: {a:"a"}}]}
+                    options = {this._getVendorOptions()}
                     text={item.nrDostawcy}
                     onChanged = {update}
                 />
@@ -227,6 +230,18 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
         const newJPK = {...this.props.jpk}
         newJPK.podatekZakup = numValue;
         this.props.updateJpk(newJPK);
+    }
+
+    @autobind
+    private _getVendorOptions(): IComboBoxOption[] {
+        const vendors = this.props.availableVendors;
+        return vendors.map<IComboBoxOption>(v => {
+            return {
+                data: v,
+                key: v.vendorNumber,
+                text: v.vendorName
+            }
+        });
     }
     
 
