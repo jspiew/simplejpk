@@ -23,7 +23,7 @@ export function downloadCSV(jpk: IJPK){
     const sell = getSellRows(jpk);
     const buy = getBuyRows(jpk);
 
-    const jpkContent = [...header, ...buy, ...sell]
+    const jpkContent = [...header, ...sell, ...buy]
     
     csvContent+=getHeaderRow();
     jpkContent.forEach(row => {
