@@ -110,12 +110,12 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
                     item.dataSprzedazy = moment(v);
                     this.props.updateSellInvoice(index || 0, item);
                 }
-                return <DatePicker className={item.dataSprzedazy === undefined ? "dateInvalid" : undefined}  value={item.dataSprzedazy === undefined ? undefined : item.dataSprzedazy.toDate()} onSelectDate={update} formatDate={this._formatDate}/>
+                return <DatePicker className={item.dataSprzedazy === undefined ? "dateInvalid" : undefined} value={item.dataSprzedazy === undefined ? undefined : item.dataSprzedazy.toDate()} onSelectDate={update} formatDate={this._formatDate} initialPickerDate={moment().add(-1, "month").startOf("month").toDate()}/>
             }
         },
         {
             key: "k19",
-            name: "K19",
+            name: "netto",
             className: "invoiceDetailsCell",
             minWidth: 75,
             onRender: (item: IFakturaSprzedazy, index) => {
