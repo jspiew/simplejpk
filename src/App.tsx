@@ -19,7 +19,7 @@ class App extends React.Component<{},{jpk:IJPK, selectedDate: moment.Moment}> {
 
       initializeIcons();
 
-    const selectedDate = moment();
+    const selectedDate = moment().add(-1,"month");
     const jpk = this.extractJPK(selectedDate);
     this.state = {
       selectedDate,
