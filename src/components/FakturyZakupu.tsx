@@ -40,11 +40,11 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
             minWidth: 120,
             maxWidth: 120,
             onRender: (item:IFakturaZakupu, index) => {
-                const update = (v:string) => {
+                const update = (ev: React.FormEvent, v:string) => {
                     item.nrDostawcy = v;
                     this.props.updateBuyInvoice(index || 0, item);
                 }
-                return <TextField tabIndex={(index||0)+1} value={item.nrDostawcy} onGetErrorMessage={validateRequired} onChanged= {update}/>
+                return <TextField tabIndex={(index||0)+1} value={item.nrDostawcy} onGetErrorMessage={validateRequired} onChange= {update}/>
             }
         },
         {
@@ -54,11 +54,11 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
             minWidth: 170,
             maxWidth: 170,
             onRender: (item: IFakturaZakupu, index) => {
-                const update = (v: string) => {
+                const update = (ev: React.FormEvent, v: string) => {
                     item.nazwaDostawcy = v;
                     this.props.updateBuyInvoice(index || 0, item);
                 }
-                return <TextField tabIndex={(index || 0) + 2} value={item.nazwaDostawcy} onChanged={update} onGetErrorMessage={validateRequired} />
+                return <TextField tabIndex={(index || 0) + 2} value={item.nazwaDostawcy} onChange={update} onGetErrorMessage={validateRequired} />
             }
         },
         {
@@ -68,11 +68,11 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
             minWidth: 200,
             maxWidth: 200,
             onRender: (item: IFakturaZakupu, index) => {
-                const update = (v: string) => {
+                const update = (ev: React.FormEvent, v: string) => {
                     item.adresDostawcy = v;
                     this.props.updateBuyInvoice(index || 0, item);
                 }
-                return <TextField tabIndex={(index || 0) + 3} value={item.adresDostawcy} multiline={true} rows={2} onChanged={update} onGetErrorMessage={validateRequired} />
+                return <TextField tabIndex={(index || 0) + 3} value={item.adresDostawcy} multiline={true} rows={2} onChange={update} onGetErrorMessage={validateRequired} />
             }
         },
         {
@@ -81,11 +81,11 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
             className: "invoiceDetailsCell",
             minWidth: 250,
             onRender: (item: IFakturaZakupu, index) => {
-                const update = (v: string) => {
+                const update = (ev: React.FormEvent, v: string) => {
                     item.dowodZakupu = v;
                     this.props.updateBuyInvoice(index || 0, item);
                 }
-                return <TextField tabIndex={(index || 0) + 4} value={item.dowodZakupu} onChanged={update} onGetErrorMessage={validateRequired} />
+                return <TextField tabIndex={(index || 0) + 4} value={item.dowodZakupu} onChange={update} onGetErrorMessage={validateRequired} />
             }
         },
         {
@@ -206,7 +206,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
                 <DetailsList className="invoiceList" items={this.props.jpk.zakup} selectionMode={SelectionMode.none} columns = {this.columns}/>
                 <div className="invoiceFooter">
                     <ActionButton className="addInvoiceButton" iconProps={{ iconName: 'Add', iconType: IconType.default }} text="Dodaj fakturę" onClick={this.props.addBuyInvoice} />
-                    <CurrencyField className="taxField" label="Podatek" value={this.props.jpk.podatekZakup == null ? "" : this.props.jpk.podatekZakup.toString()} onChanged={this._updateTax}/>
+                    <CurrencyField className="taxField" label="Podatek" value={this.props.jpk.podatekZakup == null ? "" : this.props.jpk.podatekZakup.toString()} onChange={this._updateTax}/>
                 </div>
             </div>
             
@@ -217,7 +217,7 @@ export class FakturyZakupu extends React.Component<IFakturyZakupuProps,{}> {
         return df(date,DATEFORMAT)
     }
 
-    private _updateTax(val: string){
+    private _updateTax(ev: React.FormEvent, val: string){
         const numValue = numeral(val === undefined ? undefined : val.replace(',', '.') || 0).value();
         const newJPK = {...this.props.jpk}
         newJPK.podatekZakup = numValue;

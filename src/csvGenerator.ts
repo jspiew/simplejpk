@@ -31,7 +31,7 @@ export function downloadCSV(jpk: IJPK){
     })
 
     const link = document.createElement('a');
-    link.setAttribute('href', "data:text/csv;charset=utf-8," + encodeURI(csvContent));
+    link.setAttribute('href', "data:text/csv;charset=utf-8," + encodeURIComponent(csvContent));
     link.setAttribute('download',`JPKVAT ${jpk.dataOd.format("mm.yyyy")}.csv`);
     link.click();
     

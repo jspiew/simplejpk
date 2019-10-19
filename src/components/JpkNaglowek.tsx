@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { TextField, autobind } from "office-ui-fabric-react"
+import { TextField } from "office-ui-fabric-react"
 import {_formatDate, validateRequired} from "../utils/utils"
 import { IJPK } from 'src/models/jpk'
 
@@ -34,23 +34,19 @@ export class JpkNaglowek extends React.Component<IJpkNaglowekProps,{}> {
         );
     }
 
-
-    @autobind
-    private _updateEmail(event: React.FormEvent, email:string) {
+    private _updateEmail  = (event: React.FormEvent, email:string) => {
         const newJPK = { ...this.props.jpk };
         newJPK.email = email;
         this.props.updateJpk(newJPK);
     }
 
-    @autobind
-    private _updateNip(event: React.FormEvent, nip: string) {
+    private _updateNip = (event: React.FormEvent, nip: string) => {
         const newJPK = { ...this.props.jpk };
         newJPK.nip = nip;
         this.props.updateJpk(newJPK);
     }
 
-    @autobind
-    private _updateFullName(event: React.FormEvent, name: string) {
+    private _updateFullName = (event: React.FormEvent, name: string) => {
         const newJPK = { ...this.props.jpk };
         newJPK.pelnaNazwa = name;
         this.props.updateJpk(newJPK);

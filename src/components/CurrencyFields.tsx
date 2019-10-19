@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { TextField, ITextFieldProps, autobind} from "office-ui-fabric-react"
+import { TextField, ITextFieldProps} from "office-ui-fabric-react"
 import * as numeral from "numeral"
 import { validateRequired } from 'src/utils/utils';
 
@@ -30,7 +30,7 @@ export class CurrencyField extends React.Component<ITextFieldProps, { recognized
         );
     }
 
-    private _onGetErrorMessage(val:string){
+    private _onGetErrorMessage = (val:string) =>{
         const ret = validateRequired(val);
         if (ret) {return ret}
         else if (isNaN(numeral(val).value())) { return "Nie rozpoznano liczby"}
@@ -38,8 +38,7 @@ export class CurrencyField extends React.Component<ITextFieldProps, { recognized
         else { return ""}
     }
 
-    @autobind
-    private _formatValue(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>){
+    private _formatValue = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const newValue = numeral(this.props.value).format("0.00");
         if (this.props.onChange) {
             this.props.onChange(event,newValue);

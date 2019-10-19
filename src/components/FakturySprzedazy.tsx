@@ -39,11 +39,11 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
             minWidth: 120,
             maxWidth: 120,
             onRender: (item: IFakturaSprzedazy, index) => {
-                const update = (v:string) => {
+                const update = (ev: React.FormEvent, v:string) => {
                     item.nrKontrahenta = v;
                     this.props.updateSellInvoice(index || 0, item);
                 }
-                return <TextField value={item.nrKontrahenta} onChanged={update} onGetErrorMessage={validateRequired}/>
+                return <TextField value={item.nrKontrahenta} onChange={update} onGetErrorMessage={validateRequired}/>
             }
         },
         {
@@ -53,11 +53,11 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
             minWidth: 170,
             maxWidth: 170,
             onRender: (item: IFakturaSprzedazy, index) => {
-                const update = (v: string) => {
+                const update = (ev: React.FormEvent, v: string) => {
                     item.nazwaKontrahenta = v;
                     this.props.updateSellInvoice(index || 0, item);
                 }
-                return <TextField value={item.nazwaKontrahenta} onChanged={update} onGetErrorMessage={validateRequired}/>
+                return <TextField value={item.nazwaKontrahenta} onChange={update} onGetErrorMessage={validateRequired}/>
             }
         },
         {
@@ -67,11 +67,11 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
             minWidth: 200,
             maxWidth: 200,
             onRender: (item: IFakturaSprzedazy, index) => {
-                const update = (v: string) => {
+                const update = (ev: React.FormEvent, v: string) => {
                     item.adresKontrahenta = v;
                     this.props.updateSellInvoice(index || 0, item);
                 }
-                return <TextField value={item.adresKontrahenta} multiline={true} rows={2} onGetErrorMessage={validateRequired} onChanged={update} />
+                return <TextField value={item.adresKontrahenta} multiline={true} rows={2} onGetErrorMessage={validateRequired} onChange={update} />
             }
         },
         {
@@ -80,11 +80,11 @@ export class FakturySprzedazy extends React.Component<IFakturySprzedazyProps,{}>
             className: "invoiceDetailsCell",
             minWidth: 250,
             onRender: (item: IFakturaSprzedazy, index) => {
-                const update = (v: string) => {
+                const update = (ev: React.FormEvent, v: string) => {
                     item.dowodSprzedazy = v;
                     this.props.updateSellInvoice(index || 0, item);
                 }
-                return <TextField value={item.dowodSprzedazy} onChanged={update} onGetErrorMessage={validateRequired} />
+                return <TextField value={item.dowodSprzedazy} onChange={update} onGetErrorMessage={validateRequired} />
             }
         },
         {

@@ -2,9 +2,8 @@ import * as React from 'react';
 import './App.css';
 import { IJPK, IFakturaZakupu, IFakturaSprzedazy, IJpkProfile } from './models/jpk';
 import { FakturyZakupu } from './components/FakturyZakupu';
-import { autobind } from 'office-ui-fabric-react/lib/Utilities';
-import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { IconType } from 'office-ui-fabric-react/lib/Icon';
+import { DefaultButton } from 'office-ui-fabric-react';
+import { IconType } from 'office-ui-fabric-react';
 import { FakturySprzedazy } from './components/FakturySprzedazy';
 import { initializeIcons } from '@uifabric/icons';
 import { JpkNaglowek } from './components/JpkNaglowek';
@@ -29,7 +28,7 @@ class App extends React.Component<{},{jpk:IJPK, selectedDate: moment.Moment}> {
 
   
 
-  public componentDidUpdate(){
+  public componentDidUpdate= () => {
     window.localStorage.setItem("JPK_" + this.state.selectedDate.format("YYYYMM"),JSON.stringify(this.state.jpk));
     window.localStorage.setItem("JPK_profileconsts",JSON.stringify({
       nip: this.state.jpk.nip,
@@ -80,8 +79,7 @@ class App extends React.Component<{},{jpk:IJPK, selectedDate: moment.Moment}> {
     );
   }
 
-  @autobind 
-  private _incrementMonth(){
+  private _incrementMonth= () => {
     const newDate = moment(this.state.selectedDate).add(1, "month");
     const jpk = this.extractJPK(newDate);
     this.setState({
@@ -90,8 +88,8 @@ class App extends React.Component<{},{jpk:IJPK, selectedDate: moment.Moment}> {
     })
   }
 
-  @autobind 
-  private _decrementMonth() {
+   
+  private _decrementMonth= () => {
     const newDate = moment(this.state.selectedDate).add(-1, "month");
     const jpk = this.extractJPK(newDate);
     this.setState({
@@ -100,13 +98,13 @@ class App extends React.Component<{},{jpk:IJPK, selectedDate: moment.Moment}> {
     })
   }
 
-  @autobind 
-  private _getCSV(){
+   
+  private _getCSV= () => {
     downloadCSV(this.state.jpk)
   }
 
-  @autobind
-  private _addBuyInvoice() {
+  
+  private _addBuyInvoice= () => {
     const newJPK = {...this.state.jpk};
     const newInvoices = [...newJPK.zakup];
     newInvoices.push({
@@ -126,8 +124,8 @@ class App extends React.Component<{},{jpk:IJPK, selectedDate: moment.Moment}> {
     })
   }
 
-  @autobind
-  private _copyBuyInvoice(index:number) {
+  
+  private _copyBuyInvoice = (index:number) => {
     const newJPK = { ...this.state.jpk };
     const newInvoices = [...newJPK.zakup];
     const newInvoice  = {...newInvoices[index]}
@@ -138,8 +136,8 @@ class App extends React.Component<{},{jpk:IJPK, selectedDate: moment.Moment}> {
     })
   }
 
-  @autobind
-  private _removeBuyInvoice(index: number) {
+  
+  private _removeBuyInvoice = (index: number) => {
     const newJPK = { ...this.state.jpk };
     const newInvoices = [...newJPK.zakup];
     newInvoices.splice(index,1);
@@ -149,8 +147,8 @@ class App extends React.Component<{},{jpk:IJPK, selectedDate: moment.Moment}> {
     })
   }
 
-  @autobind
-  private _updateBuyInvoice(index: number, invoice: IFakturaZakupu, recalculateTax = false) {
+  
+  private _updateBuyInvoice = (index: number, invoice: IFakturaZakupu, recalculateTax = false) => {
     const newJPK = { ...this.state.jpk };
     const newInvoices = [...newJPK.zakup];
     newJPK.zakup = newInvoices;
@@ -166,8 +164,8 @@ class App extends React.Component<{},{jpk:IJPK, selectedDate: moment.Moment}> {
     })
   }
 
-  @autobind
-  private _addSellInvoice() {
+  
+  private _addSellInvoice= () => {
     const newJPK = { ...this.state.jpk };
     const newInvoices = [...newJPK.sprzedaz];
     newInvoices.push({
@@ -187,8 +185,8 @@ class App extends React.Component<{},{jpk:IJPK, selectedDate: moment.Moment}> {
     })
   }
 
-  @autobind
-  private _copySellInvoice(index: number) {
+  
+  private _copySellInvoice = (index: number) => {
     const newJPK = { ...this.state.jpk };
     const newInvoices = [...newJPK.sprzedaz];
     const newInvoice = { ...newInvoices[index] }
@@ -199,8 +197,8 @@ class App extends React.Component<{},{jpk:IJPK, selectedDate: moment.Moment}> {
     })
   }
 
-  @autobind
-  private _removeSellInvoice(index: number) {
+  
+  private _removeSellInvoice = (index: number) => {
     const newJPK = { ...this.state.jpk };
     const newInvoices = [...newJPK.zakup];
     newInvoices.splice(index, 1);
@@ -210,8 +208,8 @@ class App extends React.Component<{},{jpk:IJPK, selectedDate: moment.Moment}> {
     })
   }
 
-  @autobind
-  private _updateSellInvoice(index: number, invoice: IFakturaSprzedazy, recalculateTax = false) {
+  
+  private _updateSellInvoice = (index: number, invoice: IFakturaSprzedazy, recalculateTax = false) => {
     const newJPK = { ...this.state.jpk };
     const newInvoices = [...newJPK.sprzedaz];
     newJPK.sprzedaz = newInvoices;
@@ -227,15 +225,15 @@ class App extends React.Component<{},{jpk:IJPK, selectedDate: moment.Moment}> {
     })
   }
 
-  @autobind 
-  private _updateJPK(jpk: IJPK){
+   
+  private _updateJPK = (jpk: IJPK) => {
     this.setState({
       jpk
     })
   }
 
-  @autobind
-  private extractJPK(selectedDate: moment.Moment) {
+  
+  private extractJPK = (selectedDate: moment.Moment) => {
     const lastJPKstring = window.localStorage.getItem("JPK_" + selectedDate.format("YYYYMM"))
     if (lastJPKstring && window.location.search.indexOf("dbg") < 0) {
       const loadedJPK = JSON.parse(lastJPKstring) as IJPK;
@@ -267,7 +265,7 @@ class App extends React.Component<{},{jpk:IJPK, selectedDate: moment.Moment}> {
     }
   }
 
-  private emptyJpk(date: moment.Moment): IJPK {
+  private emptyJpk = (date: moment.Moment): IJPK => {
     const ret = {
       dataDo: moment(date).endOf("month"),
       dataOd: moment(date).startOf("month"),
